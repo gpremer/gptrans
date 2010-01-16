@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src-test"/>
+	<classpathentry kind="src" path="src-config"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.jar" sourcepath="/usr/local/lib/java/restlet-gae-2.0/src/org.restlet"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.ext.servlet.jar" sourcepath="/usr/local/lib/java/restlet-gae-2.0/src/org.restlet.ext.servlet"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.ext.xstream.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/com.thoughtworks.xstream.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.ext.xml.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-2.0.jar" sourcepath="/usr/local/lib/java/guice-2.0-src/src">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/usr/local/lib/java/guice-2.0/javadoc"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-servlet-2.0.jar" sourcepath="/usr/local/lib/java/guice-2.0/javadoc">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/usr/local/lib/java/guice-2.0/javadoc"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/aopalliance.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>

@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.premereur.gae.transport.service.resource.QuoteRequestResource;
-import net.premereur.gae.transport.service.resource.QuoteRequestsResource;
+import net.premereur.gae.transport.service.v1.resource.QuoteRequestResource;
+import net.premereur.gae.transport.service.v1.resource.QuoteRequestsResource;
 
 import org.restlet.Application;
 import org.restlet.Context;
@@ -38,8 +38,8 @@ public class RestletServlet extends HttpServlet {
 		application.setInboundRoot(new GuiceRouter(injector, context) {
 			@Override
 			protected void attachRoutes() {
-				attach("/quoteRequests", QuoteRequestsResource.class);
-				attach("/quoteRequests/{requestId}", QuoteRequestResource.class);
+				attach("/v1/quoteRequests", QuoteRequestsResource.class);
+				attach("/v1/quoteRequests/{requestId}", QuoteRequestResource.class);
 			}
 		});
 		adapter = new ServletAdapter(getServletContext());

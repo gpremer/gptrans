@@ -1,4 +1,4 @@
-package net.premereur.gae.transport.service.servlet;
+package net.premereur.gae.transport.service.v1.resource;
 
 import java.io.IOException;
 

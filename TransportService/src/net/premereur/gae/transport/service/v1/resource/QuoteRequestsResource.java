@@ -1,11 +1,10 @@
-package net.premereur.gae.transport.service.resource;
+package net.premereur.gae.transport.service.v1.resource;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
 import net.premereur.gae.transport.domain.QuoteRequest;
-import net.premereur.gae.transport.service.servlet.BaseResource;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;

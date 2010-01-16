@@ -1,4 +1,4 @@
-package net.premereur.gae.transport.service.resource;
+package net.premereur.gae.transport.service.v1.resource;
 
 import java.util.Calendar;
 import java.util.Date;

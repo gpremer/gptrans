@@ -63,7 +63,10 @@ public class BaseResource extends ServerResource {
 
 	@Override
 	protected void doRelease() throws ResourceException {
-		getEntityManager().close();
+		final EntityManager entityManager = getEntityManager();
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
 		super.doRelease();
 	}
 

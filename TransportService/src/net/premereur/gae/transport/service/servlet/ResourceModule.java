@@ -13,7 +13,7 @@ public class ResourceModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		
+
 	}
 
 	@Provides

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.persistence.EntityTransaction;
+
 import net.premereur.gae.transport.domain.QuoteRequest;
 
 import org.restlet.data.MediaType;
@@ -29,9 +31,7 @@ public class QuoteRequestsResource extends BaseResource {
 	 * Handle POST requests: create a new item.
 	 */
 	@Post
-	public Representation create(Representation entity) {
-		Representation result = null;
-
+	public Representation create(Representation entity) {		
 		try {
 			Long id = store(converter.fromRepresentation(entity));
 			LOG.info("Quote request created with id " + id);
@@ -39,12 +39,11 @@ public class QuoteRequestsResource extends BaseResource {
 			Representation rep = new StringRepresentation("Item created", MediaType.TEXT_PLAIN);
 			// Indicates where the new resource is located.
 			rep.setIdentifier(getRequest().getResourceRef().getIdentifier() + "/" + id);
-			result = rep;
+			return rep;
 		} catch (Exception e) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-			result = generateErrorRepresentation("quote could not be saved ", "1");
+			return generateErrorRepresentation("quote could not be saved ", "1");
 		}
-		return result;
 	}
 
 	/**
@@ -71,13 +70,17 @@ public class QuoteRequestsResource extends BaseResource {
 		} catch (IOException e) {
 			LOG.severe("Problem listing all quote requests");
 			System.err.println(e);
+			setStatus(Status.SERVER_ERROR_INTERNAL);
+			return generateErrorRepresentation("Quote list could not be retrieved", "2");
 		}
 
-		return null;
 	}
 
 	public Long store(QuoteRequest qr) {
+		EntityTransaction transaction = getEntityManager().getTransaction();
+		transaction.begin();
 		getEntityManager().persist(qr);
+		transaction.commit();
 		return qr.getId();
 	}
 }

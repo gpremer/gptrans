@@ -13,8 +13,7 @@ public class ResourceModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		//bind(EntityManagerFactory.class);
-		//bind(EntityManager.class);
+		
 	}
 
 	@Provides

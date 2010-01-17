@@ -1,0 +1,9 @@
+A sample project for Google Appengine
+
+It demonstrates 
+   * Google Appengine
+   * Restlet 2.0
+   * Google Guice
+   * Warp Persist
+   * Using Google datastore with JPA
+

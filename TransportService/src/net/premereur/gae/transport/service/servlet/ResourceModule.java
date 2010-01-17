@@ -1,31 +1,31 @@
 package net.premereur.gae.transport.service.servlet;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import net.premereur.gae.transport.domain.JPAQuoteRequestRepository;
+import net.premereur.gae.transport.domain.QuoteRequestRepository;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
-import com.google.inject.servlet.RequestScoped;
+import com.wideplay.warp.persist.jpa.JpaUnit;
 
 public class ResourceModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-
+		bind(PersistenceInitialiser.class).asEagerSingleton();
+		bind(QuoteRequestRepository.class).to(JPAQuoteRequestRepository.class);
+		bindConstant().annotatedWith(JpaUnit.class).to("transactions-optional");		
 	}
 
-	@Provides
-	@RequestScoped
-	EntityManager providesEntityManager(EntityManagerFactory emf) {
-		return emf.createEntityManager();
-	}
-
-	@Provides
-	@Singleton
-	EntityManagerFactory providesEntityManagerFactory() {
-		return Persistence.createEntityManagerFactory("transactions-optional");
-	}
+	
+//	@Provides
+//	@RequestScoped
+//	EntityManager providesEntityManager(EntityManagerFactory emf) {
+//		return emf.createEntityManager();
+//	}
+//
+//	@Provides
+//	@Singleton
+//	EntityManagerFactory providesEntityManagerFactory() {
+//		return Persistence.createEntityManagerFactory("transactions-optional");
+//	}
 
 }

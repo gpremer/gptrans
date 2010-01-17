@@ -12,7 +12,6 @@ import net.premereur.gae.transport.service.v1.resource.QuoteRequestsResource;
 
 import org.restlet.Application;
 import org.restlet.Context;
-import org.restlet.ext.servlet.ServletAdapter;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -28,7 +27,7 @@ public class RestletServlet extends HttpServlet {
 	@Inject
 	private Injector injector;
 	// private Context context;
-	private ServletAdapter adapter;
+	private GAEServletAdapter adapter;
 
 	@Override
 	public void init() throws ServletException {
@@ -42,7 +41,7 @@ public class RestletServlet extends HttpServlet {
 				attach("/v1/quoteRequests/{requestId}", QuoteRequestResource.class);
 			}
 		});
-		adapter = new ServletAdapter(getServletContext());
+		adapter = new GAEServletAdapter(getServletContext());
 		adapter.setTarget(application);
 	}
 

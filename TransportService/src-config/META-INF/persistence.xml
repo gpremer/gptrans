@@ -5,7 +5,7 @@
         http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
 	version="1.0">
 
-	<persistence-unit name="transactions-optional">
+	<persistence-unit name="transactions-optional" transaction-type="RESOURCE_LOCAL">
 		<provider>
 			org.datanucleus.store.appengine.jpa.DatastorePersistenceProvider
 		</provider>

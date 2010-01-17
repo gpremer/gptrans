@@ -1,9 +1,11 @@
 package net.premereur.gae.transport.service.v1.resource;
 
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.premereur.gae.transport.domain.QuoteRequest;
+import net.premereur.gae.transport.domain.QuoteRequestRepository;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -15,25 +17,30 @@ import org.restlet.resource.Put;
 import org.restlet.resource.ResourceException;
 import org.w3c.dom.Document;
 
+import com.google.inject.Inject;
 
-public class QuoteRequestResource extends BaseResource {
+public class QuoteRequestResource extends QuoteRequestResourceBase {
 
-	private static final Logger LOG = Logger.getLogger(QuoteRequestResource.class.getName());
+	@Inject
+	private Logger logger;
 
 	/** The underlying QuoteRequest object. */
 	private QuoteRequest quoteRequest;
 
 	private static final QuoteConverter converter = new QuoteConverter();
 
+	@Inject
+	public QuoteRequestResource(QuoteRequestRepository repository) {
+		super(repository);
+	}
+
 	@Override
 	protected void doInit() throws ResourceException {
-		// Get the "requestID" attribute value taken from the URI template
-		// ../quoteRequests/{requestId}.
 		Long quoteRequestId = getRequestId();
 		try {
-			quoteRequest = getEntityManager().find(QuoteRequest.class, quoteRequestId);
+			quoteRequest = getRepository().findByKey(quoteRequestId);
 		} catch (Exception e) {
-			LOG.fine("Looking up quote request for id " + quoteRequestId + "failed: " + e.getMessage());
+			logger.log(Level.INFO, "Couldn't retrieve quoteRequest with key " + quoteRequestId, e);
 			this.quoteRequest = null;
 		}
 		setExisting(this.quoteRequest != null);
@@ -70,8 +77,7 @@ public class QuoteRequestResource extends BaseResource {
 
 			return representation;
 		} catch (IOException e) {
-			LOG.warning(e.getMessage());
-			e.printStackTrace();
+			logger.log(Level.SEVERE, "Couldn't create XML representation", e);
 			return null;
 		}
 	}

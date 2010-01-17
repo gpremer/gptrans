@@ -1,12 +1,10 @@
 package net.premereur.gae.transport.service.v1.resource;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.Logger;
 
-import javax.persistence.EntityTransaction;
-
 import net.premereur.gae.transport.domain.QuoteRequest;
+import net.premereur.gae.transport.domain.QuoteRequestRepository;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -20,25 +18,31 @@ import org.w3c.dom.Element;
 
 import com.google.inject.Inject;
 
-public class QuoteRequestsResource extends BaseResource {
+public class QuoteRequestsResource extends QuoteRequestResourceBase {
 
 	@Inject
 	private Logger LOG;
 
 	private static final QuoteConverter converter = new QuoteConverter();
 
+	@Inject
+	public QuoteRequestsResource(QuoteRequestRepository repository) {
+		super(repository);
+	}
+
 	/**
 	 * Handle POST requests: create a new item.
 	 */
 	@Post
-	public Representation create(Representation entity) {		
+	public Representation create(Representation entity) {
 		try {
-			Long id = store(converter.fromRepresentation(entity));
-			LOG.info("Quote request created with id " + id);
+			QuoteRequest quoteRequest = converter.fromRepresentation(entity);
+			getRepository().store(quoteRequest);
+			LOG.info("Quote request created with id " + quoteRequest.getId());
 			setStatus(Status.SUCCESS_CREATED);
 			Representation rep = new StringRepresentation("Item created", MediaType.TEXT_PLAIN);
 			// Indicates where the new resource is located.
-			rep.setIdentifier(getRequest().getResourceRef().getIdentifier() + "/" + id);
+			rep.setIdentifier(getRequest().getResourceRef().getIdentifier() + "/" + quoteRequest.getId());
 			return rep;
 		} catch (Exception e) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
@@ -52,16 +56,16 @@ public class QuoteRequestsResource extends BaseResource {
 	@SuppressWarnings("unchecked")
 	@Get("xml")
 	public Representation toXml() {
+		LOG.info("listing all requests");
 		// Generate the right representation according to its media type.
 		try {
 			DomRepresentation representation = new DomRepresentation(MediaType.TEXT_XML);
 
-			// Generate a DOM document representing the list of items.
+			// Generate a DOM document representing the list of quote requests.
 			Document d = representation.getDocument();
 			Element r = d.createElement("quoteRequests");
 			d.appendChild(r);
-			List<QuoteRequest> quoteRequests = getEntityManager().createQuery("SELECT FROM QuoteRequest").getResultList();
-			for (QuoteRequest quoteRequest : quoteRequests) {
+			for (QuoteRequest quoteRequest : getRepository().findAll()) {
 				r.appendChild(converter.createDOMElement(quoteRequest, d));
 			}
 
@@ -74,13 +78,5 @@ public class QuoteRequestsResource extends BaseResource {
 			return generateErrorRepresentation("Quote list could not be retrieved", "2");
 		}
 
-	}
-
-	public Long store(QuoteRequest qr) {
-		EntityTransaction transaction = getEntityManager().getTransaction();
-		transaction.begin();
-		getEntityManager().persist(qr);
-		transaction.commit();
-		return qr.getId();
 	}
 }

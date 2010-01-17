@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="src-test"/>
 	<classpathentry kind="src" path="src-config"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
@@ -21,6 +20,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/aopalliance.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/warp-persist-2.0-20090214.jar" sourcepath="/usr/local/lib/java/warp-persist-2.0-20090214/warp-persist-2.0-20090214-src.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

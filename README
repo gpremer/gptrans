@@ -1,9 +1,9 @@
 A sample project for Google Appengine
 
-It demonstrates 
+It demonstrates using a combination of 
    * Google Appengine
    * Restlet 2.0
    * Google Guice
    * Warp Persist
    * Using Google datastore with JPA
-
+   * JAXB 2.1

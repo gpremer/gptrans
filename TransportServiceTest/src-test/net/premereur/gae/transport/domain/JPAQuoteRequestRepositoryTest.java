@@ -3,8 +3,8 @@ package net.premereur.gae.transport.domain;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import net.premereur.gae.LocalAppEngineServiceTestCase;
 import net.premereur.gae.transport.service.servlet.ResourceModule;
@@ -47,7 +47,7 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 	public void shouldLoadAllQuoteRequests() throws Exception {
 		QuoteRequest qr = new QuoteRequest(new Date(), 4.1f);
 		repository.store(qr);
-		Collection<QuoteRequest> all = repository.findAll();
+		List<QuoteRequest> all = repository.findAll().getQuoteRequests();
 		assertNotNull(all);
 		assertEquals(1, all.size());
 	}

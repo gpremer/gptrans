@@ -1,7 +1,5 @@
 package net.premereur.gae.transport.domain;
 
-import java.util.Collection;
-
 import javax.persistence.EntityManager;
 
 import com.google.inject.Inject;
@@ -18,8 +16,8 @@ public class JPAQuoteRequestRepository implements QuoteRequestRepository {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<QuoteRequest> findAll() {
-		return entityManager.createQuery("SELECT FROM QuoteRequest").getResultList();
+	public QuoteRequests findAll() {
+		return new QuoteRequests(entityManager.createQuery("SELECT FROM QuoteRequest").getResultList());
 	}
 
 	@Override
@@ -27,7 +25,7 @@ public class JPAQuoteRequestRepository implements QuoteRequestRepository {
 	public void store(QuoteRequest qr) {
 		entityManager.persist(qr);
 	}
-	
+
 	@Override
 	public QuoteRequest findByKey(Long key) {
 		return entityManager.find(QuoteRequest.class, key);

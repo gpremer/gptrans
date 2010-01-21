@@ -30,7 +30,6 @@ public abstract class LocalAppEngineServiceTestCase {
 		proxy.setProperty(LocalDatastoreService.NO_STORAGE_PROPERTY, Boolean.TRUE.toString());
 	}
 
-
 	@After
 	public void tearDownAppEngine() throws Exception {
 		clearProfiles();

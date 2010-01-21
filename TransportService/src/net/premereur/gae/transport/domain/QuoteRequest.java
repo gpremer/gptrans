@@ -16,13 +16,13 @@ public class QuoteRequest {
     private Long id;
 
 	@Column(name="shipmentDate")
-	private Date shippyDate;
+	private Date shipmentDate;
 
 	private float weight;
 
 	public QuoteRequest(Date shipmentDate, float weight) {
 		super();
-		this.shippyDate = shipmentDate;
+		this.shipmentDate = shipmentDate;
 		this.weight = weight;
 	}
 
@@ -36,11 +36,11 @@ public class QuoteRequest {
 	}
 
 	public Date getShipmentDate() {
-		return shippyDate;
+		return shipmentDate;
 	}
 
 	public void setShipmentDate(Date shipmentDate) {
-		this.shippyDate = shipmentDate;
+		this.shipmentDate = shipmentDate;
 	}
 
 	public float getWeight() {

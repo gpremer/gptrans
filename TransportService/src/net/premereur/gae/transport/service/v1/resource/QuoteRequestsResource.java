@@ -1,20 +1,18 @@
 package net.premereur.gae.transport.service.v1.resource;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import net.premereur.gae.transport.domain.QuoteRequest;
 import net.premereur.gae.transport.domain.QuoteRequestRepository;
+import net.premereur.gae.transport.domain.QuoteRequests;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
-import org.restlet.ext.xml.DomRepresentation;
+import org.restlet.ext.jaxb.JaxbRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import com.google.inject.Inject;
 
@@ -58,25 +56,6 @@ public class QuoteRequestsResource extends QuoteRequestResourceBase {
 	public Representation toXml() {
 		LOG.info("listing all requests");
 		// Generate the right representation according to its media type.
-		try {
-			DomRepresentation representation = new DomRepresentation(MediaType.TEXT_XML);
-
-			// Generate a DOM document representing the list of quote requests.
-			Document d = representation.getDocument();
-			Element r = d.createElement("quoteRequests");
-			d.appendChild(r);
-			for (QuoteRequest quoteRequest : getRepository().findAll()) {
-				r.appendChild(converter.createDOMElement(quoteRequest, d));
-			}
-
-			// Returns the XML representation of this document.
-			return representation;
-		} catch (IOException e) {
-			LOG.severe("Problem listing all quote requests");
-			System.err.println(e);
-			setStatus(Status.SERVER_ERROR_INTERNAL);
-			return generateErrorRepresentation("Quote list could not be retrieved", "2");
-		}
-
+		return new JaxbRepresentation<QuoteRequests>(getRepository().findAll());
 	}
 }

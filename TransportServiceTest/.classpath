@@ -10,6 +10,7 @@
 	<classpathentry kind="lib" path="lib/geronimo-jpa_3.0_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/guice-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/warp-persist-2.0-20090214.jar"/>
+	<classpathentry kind="lib" path="lib/joda-time-1.5.2.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/TransportService"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

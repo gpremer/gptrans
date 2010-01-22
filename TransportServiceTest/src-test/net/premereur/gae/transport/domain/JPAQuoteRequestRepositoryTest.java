@@ -37,7 +37,7 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 
 	@Test
 	public void shouldStoreQuoteRequestTransactionally() throws Exception {
-		QuoteRequest qr = new QuoteRequest(new Date(), 4.1f);
+		QuoteRequest qr = new QuoteRequest(new Date(), 4.1f, 1, "#1");
 
 		repository.store(qr);
 		assertNotNull(qr.getId());
@@ -45,7 +45,7 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 
 	@Test
 	public void shouldLoadAllQuoteRequests() throws Exception {
-		QuoteRequest qr = new QuoteRequest(new Date(), 4.1f);
+		QuoteRequest qr = new QuoteRequest(new Date(), 4.1f, 1, "#2");
 		repository.store(qr);
 		List<QuoteRequest> all = repository.findAll().getQuoteRequests();
 		assertNotNull(all);
@@ -54,7 +54,7 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 
 	@Test
 	public void shouldFindQuoteRequestByKey() throws Exception {
-		QuoteRequest qrOrig = new QuoteRequest(new Date(), 4.1f);
+		QuoteRequest qrOrig = new QuoteRequest(new Date(), 4.1f, 1, "#3");
 		repository.store(qrOrig);
 		QuoteRequest qrFound = repository.findByKey(qrOrig.getId());
 		assertNotNull(qrFound);

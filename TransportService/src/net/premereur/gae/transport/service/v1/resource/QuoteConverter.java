@@ -17,8 +17,10 @@ public final class QuoteConverter {
 		Form form = new Form(entity);
 		Date qShipmentDate = parseDate(form.getFirstValue("shipmentDate"));
 		float qWeight = Float.parseFloat(form.getFirstValue("weight"));
+		int qNumPackages = Integer.parseInt(form.getFirstValue("numPackages"));
+		String qShipRef = form.getFirstValue("shipperReference");
 
-		return new QuoteRequest(qShipmentDate, qWeight);
+		return new QuoteRequest(qShipmentDate, qWeight, qNumPackages, qShipRef);
 	}
 
 	protected Date parseDate(String dateString) {

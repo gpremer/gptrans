@@ -7,22 +7,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.premereur.gae.transport.service.v1.resource.QuoteRequestResource;
-import net.premereur.gae.transport.service.v1.resource.QuoteRequestsResource;
-
 import org.restlet.Application;
 import org.restlet.Context;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.google.inject.Singleton;
 
-@Singleton
-public class RestletServlet extends HttpServlet {
-	/**
-	 * Class version.
-	 */
-	private static final long serialVersionUID = 1L;
+/**
+ * Common functionality for Servlets running in Google Appengine serving
+ * resources the Restlet way.
+ * 
+ * @author gpremer
+ * 
+ */
+public abstract class GAERestletServlet extends HttpServlet {
 
 	@Inject
 	private Injector injector;
@@ -31,22 +29,21 @@ public class RestletServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
+		super.init();
 		Context context = new Context();
 		Application application = new Application();
 		application.setContext(context);
-		application.setInboundRoot(new GuiceRouter(injector, context) {
-			@Override
-			protected void attachRoutes() {
-				attach("/v1/quoteRequests", QuoteRequestsResource.class);
-				attach("/v1/quoteRequests/{requestId}", QuoteRequestResource.class);
-			}
-		});
+		application.setInboundRoot(getGuiceRouter(injector, context));
 		adapter = new GAEServletAdapter(getServletContext());
 		adapter.setTarget(application);
 	}
+	
+	protected abstract GuiceRouter getGuiceRouter(Injector injector, Context context); 
 
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		adapter.service(request, response);
 	}
+
+
 }

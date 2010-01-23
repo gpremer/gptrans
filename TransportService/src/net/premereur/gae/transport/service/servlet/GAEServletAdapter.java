@@ -55,33 +55,13 @@ import org.restlet.ext.servlet.internal.ServletCall;
  * class, it will be based on the parent Servlet's context for logging purpose.<br>
  * <br>
  * This class is especially useful when directly integrating Restlets with
- * Spring managed Web applications. Here is a simple usage example:
- * 
- * <pre>
- * public class TestServlet extends HttpServlet {
- * 	private ServletAdapter adapter;
- * 
- * 	public void init() throws ServletException {
- * 		super.init();
- * 		this.adapter = new ServletAdapter(getServletContext());
- * 
- * 		Restlet trace = new Restlet(this.adapter.getContext()) {
- * 			public void handle(Request req, Response res) {
- * 				getLogger().info(&quot;Hello World&quot;);
- * 				res.setEntity(&quot;Hello World!&quot;, MediaType.TEXT_PLAIN);
- * 			}
- * 		};
- * 
- * 		this.adapter.setTarget(trace);
- * 	}
- * 
- * 	protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
- * 		this.adapter.service(req, res);
- * 	}
- * }
- * </pre>
+ * Spring managed Web applications.<br>
+ * I have adapted this class for use with Google AppEngine. The original
+ * implementation was using a custom subclass of jul.logger which is not allowed
+ * on AppEngine.
  * 
  * @author Jerome Louvel
+ * @author gpremer
  */
 public class GAEServletAdapter extends HttpServerAdapter {
 	/** The target Restlet. */

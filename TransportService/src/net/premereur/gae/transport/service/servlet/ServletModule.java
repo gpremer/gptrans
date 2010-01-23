@@ -10,10 +10,15 @@ import com.wideplay.warp.persist.PersistenceFilter;
  */
 public class ServletModule extends com.google.inject.servlet.ServletModule {
 
+	private static final String TRANSPORT_URL_PATTERN = "/transport/*";
+	private static final String TRANSPORT_SERVICE_URL_PATTERN = "/transport/quoteService/*";
+	private static final String TRANSPORT_TASK_URL_PATTERN = "/transport/tasks/*";
+
 	@Override
 	protected void configureServlets() {
-		serve("/transport/quoteService/*").with(RestletServlet.class);
-		filter("/transport/quoteService/*").through(PersistenceFilter.class);
+		filter(TRANSPORT_URL_PATTERN).through(PersistenceFilter.class);
+		serve(TRANSPORT_SERVICE_URL_PATTERN).with(ResourceRestletServlet.class);
+		serve(TRANSPORT_TASK_URL_PATTERN).with(ResourceRestletServlet.class);
 	}
 
 }

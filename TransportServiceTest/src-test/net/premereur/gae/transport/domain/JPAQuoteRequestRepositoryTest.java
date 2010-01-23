@@ -73,4 +73,13 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 		assertEquals(qr1.getId(), qrFound.getId());
 		
 	}
+	
+	@Test
+	public void shouldCleanRepository() throws Exception {
+		repository.store(qr1);
+		repository.store(qr2);
+		repository.removeAll();
+		List<QuoteRequest> all = repository.findAll().getQuoteRequests();
+		assertEquals(0, all.size());		
+	}
 }

@@ -1,7 +1,6 @@
 package net.premereur.gae.transport.service.servlet;
 
-import net.premereur.gae.transport.service.v1.resource.QuoteRequestResource;
-import net.premereur.gae.transport.service.v1.resource.QuoteRequestsResource;
+import net.premereur.gae.transport.service.admin.CleanQuoteRequestsResource;
 
 import org.restlet.Context;
 
@@ -9,13 +8,14 @@ import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
 /**
- * Restlet servlet that operates on public resources.
+ * Restlet servlet for task queue services. These resources are support to be
+ * protected by access control.
  * 
  * @author gpremer
  * 
  */
 @Singleton
-public class ResourceRestletServlet extends GAERestletServlet {
+public class TaskRestletServlet extends GAERestletServlet {
 	/**
 	 * Class version.
 	 */
@@ -26,8 +26,7 @@ public class ResourceRestletServlet extends GAERestletServlet {
 		return new GuiceRouter(injector, context) {
 			@Override
 			protected void attachRoutes() {
-				attach("/v1/quoteRequests", QuoteRequestsResource.class);
-				attach("/v1/quoteRequests/{requestId}", QuoteRequestResource.class);
+				attach("/admin/cleanQuoteRequests", CleanQuoteRequestsResource.class);
 			}
 		};
 	}

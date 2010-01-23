@@ -8,4 +8,6 @@ public interface QuoteRequestRepository {
 	QuoteRequests findAll();
 
 	QuoteRequest findByKey(Long quoteRequestId);
+
+	void removeAll();
 }

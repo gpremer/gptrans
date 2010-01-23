@@ -7,19 +7,26 @@
 <!-- but may lead to some differences in layout.   -->
 
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Hello App Engine</title>
-  </head>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Hello App Engine</title>
+</head>
 
-  <body>
-    <h1>Hello App Engine!</h1>
-	
-        <p>Available Services:</p>        
+<body>
+<h1>Hello App Engine!</h1>
 
-      <ul>
-        <li><a href="/transport/quoteService/v1/quoteRequests">List all quote requests</a></li>
-        <li><a href="/transport/html/createQuoteRequests.html">Create a request</a></li>
-      </ul>
-  </body>
+<h2>Public services:</h2>
+<ul>
+	<li><a href="/transport/quoteService/v1/quoteRequests">List
+	all quote requests</a></li>
+	<li><a href="/transport/html/createQuoteRequests.html">Create
+	a request</a></li>
+</ul>
+
+<h2>Restricted services:</h2>
+<ul>
+	<li><form action="/transport/tasks/admin/cleanQuoteRequests" method="post" name="rqr"><a href="javascript:document.rqr.submit(); return false;">Remove all quoteRequests</a></li>
+</ul>
+
+</body>
 </html>

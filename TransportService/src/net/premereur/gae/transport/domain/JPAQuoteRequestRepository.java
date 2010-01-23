@@ -30,5 +30,10 @@ public class JPAQuoteRequestRepository implements QuoteRequestRepository {
 	public QuoteRequest findByKey(Long key) {
 		return entityManager.find(QuoteRequest.class, key);
 	}
+	
+	@Override
+	public void removeAll() {
+		entityManager.createQuery("DELETE FROM QuoteRequest").executeUpdate();		
+	}
 
 }

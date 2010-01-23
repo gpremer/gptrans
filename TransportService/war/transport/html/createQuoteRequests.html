@@ -3,13 +3,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Create quote requests</title>
+<title>Create a new quote request</title>
 </head>
 <body>
 <form action="/transport/quoteService/v1/quoteRequests" method="post">
 <dl>
-	<dt>Shipment date</dt>
-	<dd><input type="text" name="shipmentDate" /></dd>
+	<dt>Earliest shipment time</dt>
+	<dd><input type="text" name="earliestShipmentTime" /></dd>
+	<dt>Latest shipment time</dt>
+	<dd><input type="text" name="latestShipmentTime" /></dd>
 	<dt>Weight</dt>
 	<dd><input type="text" name="weight" /></dd>
 	<dt>Number of packages</dt>

@@ -17,9 +17,10 @@ import org.w3c.dom.NodeList;
 
 public class QuoteRequestSerialiserTest {
 
-	DateTime someDay = new DateTime(2000, 1, 2, 3, 4, 5, 6);
-	QuoteRequest qr1 = new QuoteRequest(someDay.toDate(), 1.5f, 1, "#AAA");
-	QuoteRequest qr2 = new QuoteRequest(new Date(), 2f, 1, "#AAB");
+	DateTime earliestDate = new DateTime(2000, 1, 2, 3, 4, 5, 6);
+	DateTime latestDate = new DateTime(2000, 1, 2, 5, 4, 5, 6);
+	QuoteRequest qr1 = new QuoteRequest(earliestDate.toDate(), latestDate.toDate(), 1.5f, 1, "#AAA");
+	QuoteRequest qr2 = new QuoteRequest(new Date(), new Date(), 2f, 1, "#AAB");
 	QuoteRequests qrs = new QuoteRequests(Arrays.asList(qr1, qr2));
 
 	@Before
@@ -48,7 +49,8 @@ public class QuoteRequestSerialiserTest {
 		assertEquals("1.5", eltNode.getElementsByTagName("weight").item(0).getTextContent());
 		assertEquals("1", eltNode.getElementsByTagName("numPackages").item(0).getTextContent());
 		assertEquals("#AAA", eltNode.getElementsByTagName("shipperReference").item(0).getTextContent());
-		assertEquals("2000-01-02T03:04:05.006Z", eltNode.getElementsByTagName("shipmentDate").item(0).getTextContent());
+		assertEquals("2000-01-02T03:04:05.006Z", eltNode.getElementsByTagName("earliestShipmentTime").item(0).getTextContent());
+		assertEquals("2000-01-02T05:04:05.006Z", eltNode.getElementsByTagName("latestShipmentTime").item(0).getTextContent());
 	}
 
 	@Test

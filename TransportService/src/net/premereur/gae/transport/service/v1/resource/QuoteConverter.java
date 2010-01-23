@@ -1,8 +1,6 @@
 package net.premereur.gae.transport.service.v1.resource;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -14,22 +12,29 @@ import org.restlet.representation.Representation;
 public final class QuoteConverter {
 
 	public QuoteRequest fromRepresentation(Representation entity) {
-		Form form = new Form(entity);
-		Date qShipmentDate = parseDate(form.getFirstValue("shipmentDate"));
-		float qWeight = Float.parseFloat(form.getFirstValue("weight"));
-		int qNumPackages = Integer.parseInt(form.getFirstValue("numPackages"));
-		String qShipRef = form.getFirstValue("shipperReference");
-
-		return new QuoteRequest(qShipmentDate, qWeight, qNumPackages, qShipRef);
+		final Form form = new Form(entity);
+		return new QuoteRequest(getFormDate(form, "earliestShipmentTime"), getFormDate(form, "latestShipmentTime"), getFormFloat(form, "weight"), getFormInt(
+				form, "numPackages"), getFormString(form, "shipperReference"));
 	}
 
-	protected Date parseDate(String dateString) {
+	public String getFormString(Form form, String field) {
+		return form.getFirstValue(field);
+	}
+
+	public int getFormInt(Form form, String field) {
+		return Integer.parseInt(form.getFirstValue(field));
+	}
+
+	public float getFormFloat(Form form, String field) {
+		return Float.parseFloat(form.getFirstValue(field));
+	}
+
+	public Date getFormDate(Form form, String field) {
+		return parseDate(form.getFirstValue(field));
+	}
+
+	public Date parseDate(String dateString) {
 		return DatatypeConverter.parseDateTime(dateString).getTime();
 	}
 
-	protected String formatDate(Date date) {
-		Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-		calendar.setTime(date);
-		return DatatypeConverter.printDate(calendar);
-	}
 }

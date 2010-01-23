@@ -1,5 +1,6 @@
 package net.premereur.gae.transport.service.v1.resource;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.premereur.gae.transport.domain.QuoteRequest;
@@ -44,6 +45,7 @@ public class QuoteRequestsResource extends QuoteRequestResourceBase {
 			return rep;
 		} catch (Exception e) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			LOG.log(Level.WARNING, "Invalid input", e);
 			return generateErrorRepresentation("quote could not be saved ", "1");
 		}
 	}

@@ -13,7 +13,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
 @Entity
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(namespace = Constants.QUOTE_SCHEMA_NS)
@@ -23,7 +22,9 @@ public class QuoteRequest {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private Date shipmentDate;
+	private Date earliestShipmentTime;
+
+	private Date latestShipmentTime;
 
 	private Float weight;
 
@@ -31,9 +32,10 @@ public class QuoteRequest {
 
 	private String shipperReference;
 
-	public QuoteRequest(Date shipmentDate, float weight, int numPackages, String shipperReference) {
+	public QuoteRequest(Date earliestShipmentTime, Date latestShipmentTime, Float weight, Integer numPackages, String shipperReference) {
 		super();
-		this.shipmentDate = shipmentDate;
+		this.earliestShipmentTime = earliestShipmentTime;
+		this.latestShipmentTime = latestShipmentTime;
 		this.weight = weight;
 		this.numPackages = numPackages;
 		this.shipperReference = shipperReference;
@@ -52,23 +54,21 @@ public class QuoteRequest {
 	void setId(Long id) {
 		this.id = id;
 	}
-	
-	public Date getShipmentDate() {
-		return shipmentDate;
+
+	public Date getEarliestShipmentTime() {
+		return earliestShipmentTime;
+	}
+
+	public Date getLatestShipmentTime() {
+		return latestShipmentTime;
 	}
 
 	public float getWeight() {
-		if ( weight == null) {
-			weight = 0f;
-		}
-		return weight;
+		return valueWithDefault(weight, 0f);
 	}
 
 	public int getNumPackages() {
-		if ( numPackages == null ) {
-			numPackages = 1;
-		}
-		return numPackages;
+		return valueWithDefault(numPackages, 1);
 	}
 
 	public String getShipperReference() {
@@ -76,7 +76,11 @@ public class QuoteRequest {
 	}
 
 	@Override
-	public String toString() {		
+	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
+	}
+	
+	private static final <T> T valueWithDefault(T value, T defaultValue) {
+		return value == null ? defaultValue : value;
 	}
 }

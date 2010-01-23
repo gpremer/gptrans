@@ -17,11 +17,13 @@ It demonstrates using a combination of
 
 The sample system is a mockup for a package delivery provider interfacing with large customers (think Amazon). 
 
+### Features
+
 The system receives requests for quotes on a delivery service per shipment unit.
 
-Assynchronously, a quote is sent to the original requestor.
+Asynchronously, a quote is sent to the original requestor.
 
-If the quote is accepted (outside of this system) a request for transport is made. This request is responded to synchrounously.
+If the quote is accepted (outside of this system) a request for transport is made. This request is responded to synchronously.
 
 Two more notifications are sent:
 

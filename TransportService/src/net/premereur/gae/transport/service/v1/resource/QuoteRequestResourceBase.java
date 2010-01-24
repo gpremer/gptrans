@@ -5,7 +5,7 @@ import net.premereur.gae.transport.service.common.ResourceBase;
 
 public abstract class QuoteRequestResourceBase extends ResourceBase {
 
-	protected final QuoteRequestRepository repository;
+	private final QuoteRequestRepository repository;
 
 	public QuoteRequestResourceBase(QuoteRequestRepository repository) {
 		super();

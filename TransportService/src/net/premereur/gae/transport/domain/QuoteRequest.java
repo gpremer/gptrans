@@ -1,5 +1,9 @@
 package net.premereur.gae.transport.domain;
 
+import static java.lang.Math.log;
+import static java.lang.Math.max;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -19,6 +23,8 @@ import org.joda.time.DateTime;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(namespace = Constants.QUOTE_SCHEMA_NS)
 public class QuoteRequest {
+	private static final int TARIF_DECREASE_UNIT = 6;
+
 	@XmlAttribute
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,15 +38,15 @@ public class QuoteRequest {
 
 	private Integer numPackages;
 
-	private String shipperReference;
+	private String customerReference;
 
-	public QuoteRequest(Date earliestShipmentTime, Date latestShipmentTime, Float weight, Integer numPackages, String shipperReference) {
+	public QuoteRequest(Date earliestShipmentTime, Date latestShipmentTime, Float weight, Integer numPackages, String customerReference) {
 		super();
 		this.earliestShipmentTime = earliestShipmentTime;
 		this.latestShipmentTime = latestShipmentTime;
 		this.weight = weight;
 		this.numPackages = numPackages;
-		this.shipperReference = shipperReference;
+		this.customerReference = customerReference;
 	}
 
 	@SuppressWarnings("unused")
@@ -73,8 +79,8 @@ public class QuoteRequest {
 		return valueWithDefault(numPackages, 1);
 	}
 
-	public String getShipperReference() {
-		return shipperReference;
+	public String getCustomerReference() {
+		return customerReference;
 	}
 
 	@Override
@@ -90,12 +96,18 @@ public class QuoteRequest {
 		DateTime next = new DateTime(getEarliestShipmentTime());
 		DateTime last = new DateTime(getLatestShipmentTime());
 		ArrayList<Quote> quotes = new ArrayList<Quote>();
+		BigDecimal price;
+		double basePrice = 5*(1+log(getNumPackages()))*log(max(2, getWeight())) ;
+		double discount = 1;
 		while ( next.isBefore(last) ) {
-			Quote quote = new Quote(this);
+			price  = new BigDecimal(basePrice * discount);			
+			final Date start = next.toDate();
+			next = next.plusHours(TARIF_DECREASE_UNIT);
+			final Date end = next.toDate();
+			Quote quote = new Quote(this, price, start, end);
 			quotes.add(quote);
-			next = next.plusHours(6);
+			discount *= 0.95; 
 		}
 		return new Quotes(quotes);
-		
 	}
 }

@@ -1,8 +1,11 @@
 package net.premereur.gae.transport.domain;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+
+import java.math.BigDecimal;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -47,6 +50,16 @@ public class QuoteGenerationTest {
 	public void quotesShouldBeAboutRequest() throws Exception {
 		Quotes quotes = futureQuoteRequestSmallRange.getQuotes();
 		assertSame(futureQuoteRequestSmallRange, quotes.getQuotes().iterator().next().getOriginator());
+	}
+	
+	@Test
+	public void quotePriceShouldBedifferent() throws Exception {
+		Quotes quotes = futureQuoteRequestLargeRange.getQuotes();
+		BigDecimal prevPrice = new BigDecimal(-1);
+		for ( Quote quote : quotes.getQuotes()) {
+			assertFalse(prevPrice.equals(quote.getPrice()));
+			prevPrice = quote.getPrice();
+		}
 	}
 
 }

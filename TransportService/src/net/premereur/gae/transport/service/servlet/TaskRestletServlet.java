@@ -27,6 +27,7 @@ public class TaskRestletServlet extends GAERestletServlet {
 			@Override
 			protected void attachRoutes() {
 				attach("/admin/cleanQuoteRequests", CleanQuoteRequestsResource.class);
+				attach("/quoteByShipperRef", CleanQuoteRequestsResource.class);
 			}
 		};
 	}

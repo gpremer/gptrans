@@ -48,7 +48,7 @@ public class QuoteRequestSerialiserTest {
 		assertEquals("1", eltNode.getAttribute("id"));
 		assertEquals("1.5", eltNode.getElementsByTagName("weight").item(0).getTextContent());
 		assertEquals("1", eltNode.getElementsByTagName("numPackages").item(0).getTextContent());
-		assertEquals("#AAA", eltNode.getElementsByTagName("shipperReference").item(0).getTextContent());
+		assertEquals("#AAA", eltNode.getElementsByTagName("customerReference").item(0).getTextContent());
 		assertEquals("2000-01-02T03:04:05.006Z", eltNode.getElementsByTagName("earliestShipmentTime").item(0).getTextContent());
 		assertEquals("2000-01-02T05:04:05.006Z", eltNode.getElementsByTagName("latestShipmentTime").item(0).getTextContent());
 	}
@@ -63,6 +63,5 @@ public class QuoteRequestSerialiserTest {
 		assertEquals("http://gpdeliver.appspot.com/schema/quote/v1/", eltNode.getNamespaceURI());
 		NodeList childNodes = eltNode.getElementsByTagName("quoteRequest");
 		assertEquals(2, childNodes.getLength());
-		assertEquals("quoteRequest", childNodes.item(0).getLocalName());
 	}
 }

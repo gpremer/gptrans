@@ -24,6 +24,11 @@ public class Quotes implements Serializable {
 	public Quotes(List<Quote> quotes) {
 		this.quotes = quotes;
 	}
+		
+	@SuppressWarnings("unused")
+	private Quotes() {
+		
+	}
 
 	public List<Quote> getQuotes() {
 		return quotes;

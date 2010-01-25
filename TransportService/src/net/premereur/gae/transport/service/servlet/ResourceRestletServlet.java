@@ -28,6 +28,7 @@ public class ResourceRestletServlet extends GAERestletServlet {
 			protected void attachRoutes() {
 				attach("/v1/quoteRequests", QuoteRequestsResource.class);
 				attach("/v1/quoteRequests/{requestId}", QuoteRequestResource.class);
+				attach("/v1/quote/{}", QuoteRequestResource.class);
 			}
 		};
 	}

@@ -21,11 +21,11 @@ public class QuoteGenerationTest {
 	public void createFutureFixture() {
 		DateTime earliestDate = new DateTime(2100, 1, 1, 0, 0, 0, 0);
 		DateTime closeDate = new DateTime(2100, 1, 1, 1, 0, 0, 0);
-		futureQuoteRequestSmallRange = new QuoteRequest(earliestDate.toDate(), closeDate.toDate(), 1.5f, 1, "#AAA");
+		futureQuoteRequestSmallRange = new QuoteRequest(earliestDate.toDate(), closeDate.toDate(), 1.5f, 1, "#AAA", null);
 		DateTime furtherDate = new DateTime(2100, 1, 1, 6, 0, 0, 1);
-		futureQuoteRequestIntermediateRange = new QuoteRequest(earliestDate.toDate(), furtherDate.toDate(), 1.5f, 1, "#AAB");
+		futureQuoteRequestIntermediateRange = new QuoteRequest(earliestDate.toDate(), furtherDate.toDate(), 1.5f, 1, "#AAB", null);
 		DateTime farDate = new DateTime(2100, 1, 4, 7, 0, 0, 1);
-		futureQuoteRequestLargeRange = new QuoteRequest(earliestDate.toDate(), farDate.toDate(), 1.5f, 1, "#AAB");
+		futureQuoteRequestLargeRange = new QuoteRequest(earliestDate.toDate(), farDate.toDate(), 1.5f, 1, "#AAB", null);
 	}
 
 	@Test

@@ -39,8 +39,8 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 
 	DateTime earliestDate = new DateTime(2000, 1, 2, 3, 4, 5, 6);
 	DateTime latestDate = new DateTime(2000, 1, 2, 5, 4, 5, 6);
-	QuoteRequest qr1 = new QuoteRequest(earliestDate.toDate(), latestDate.toDate(), 1.5f, 1, "#AAA");
-	QuoteRequest qr2 = new QuoteRequest(new Date(), new Date(), 2f, 1, "#AAB");
+	QuoteRequest qr1 = new QuoteRequest(earliestDate.toDate(), latestDate.toDate(), 1.5f, 1, "#AAA", null);
+	QuoteRequest qr2 = new QuoteRequest(new Date(), new Date(), 2f, 1, "#AAB", null);
 	QuoteRequests qrs = new QuoteRequests(Arrays.asList(qr1, qr2));
 
 	@Before

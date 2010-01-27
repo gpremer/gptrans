@@ -14,7 +14,7 @@ public final class QuoteConverter {
 	public QuoteRequest fromRepresentation(Representation entity) {
 		final Form form = new Form(entity);
 		return new QuoteRequest(getFormDate(form, "earliestShipmentTime"), getFormDate(form, "latestShipmentTime"), getFormFloat(form, "weight"), getFormInt(
-				form, "numPackages"), getFormString(form, "shipperReference"));
+				form, "numPackages"), getFormString(form, "shipperReference"), getFormString(form, "callbackURL"));
 	}
 
 	public String getFormString(Form form, String field) {

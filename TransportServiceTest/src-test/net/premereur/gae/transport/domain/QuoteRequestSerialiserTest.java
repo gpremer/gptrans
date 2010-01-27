@@ -19,8 +19,8 @@ public class QuoteRequestSerialiserTest {
 
 	DateTime earliestDate = new DateTime(2000, 1, 2, 3, 4, 5, 6);
 	DateTime latestDate = new DateTime(2000, 1, 2, 5, 4, 5, 6);
-	QuoteRequest qr1 = new QuoteRequest(earliestDate.toDate(), latestDate.toDate(), 1.5f, 1, "#AAA");
-	QuoteRequest qr2 = new QuoteRequest(new Date(), new Date(), 2f, 1, "#AAB");
+	QuoteRequest qr1 = new QuoteRequest(earliestDate.toDate(), latestDate.toDate(), 1.5f, 1, "#AAA", "http://localhost/callback");
+	QuoteRequest qr2 = new QuoteRequest(new Date(), new Date(), 2f, 1, "#AAB", null);
 	QuoteRequests qrs = new QuoteRequests(Arrays.asList(qr1, qr2));
 
 	@Before
@@ -51,6 +51,16 @@ public class QuoteRequestSerialiserTest {
 		assertEquals("#AAA", eltNode.getElementsByTagName("customerReference").item(0).getTextContent());
 		assertEquals("2000-01-02T03:04:05.006Z", eltNode.getElementsByTagName("earliestShipmentTime").item(0).getTextContent());
 		assertEquals("2000-01-02T05:04:05.006Z", eltNode.getElementsByTagName("latestShipmentTime").item(0).getTextContent());
+		assertEquals("http://localhost/callback", eltNode.getElementsByTagName("callbackURL").item(0).getTextContent());
+	}
+
+	@Test
+	public void shouldNotGenerateFieldIfNoCallbackURL() throws Exception {
+		DOMResult result = new DOMResult();
+		JAXB.marshal(qr2, result);
+		Node root = result.getNode();
+		Element eltNode = (Element) root.getFirstChild();
+		assertEquals(0, eltNode.getElementsByTagName("callbackURL").getLength());
 	}
 
 	@Test

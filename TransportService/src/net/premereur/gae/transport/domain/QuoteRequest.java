@@ -40,14 +40,17 @@ public class QuoteRequest {
 	private Integer numPackages;
 
 	private String customerReference;
+	
+	private String callbackURL;
 
-	public QuoteRequest(Date earliestShipmentTime, Date latestShipmentTime, Float weight, Integer numPackages, String customerReference) {
+	public QuoteRequest(Date earliestShipmentTime, Date latestShipmentTime, Float weight, Integer numPackages, String customerReference, String callbackURL) {
 		super();
 		this.earliestShipmentTime = earliestShipmentTime;
 		this.latestShipmentTime = latestShipmentTime;
 		this.weight = weight;
 		this.numPackages = numPackages;
 		this.customerReference = customerReference;
+		this.callbackURL = callbackURL;
 	}
 
 	@SuppressWarnings("unused")
@@ -82,6 +85,10 @@ public class QuoteRequest {
 
 	public String getCustomerReference() {
 		return customerReference;
+	}
+	
+	public String getCallbackURL() {
+		return callbackURL;
 	}
 
 	@Override

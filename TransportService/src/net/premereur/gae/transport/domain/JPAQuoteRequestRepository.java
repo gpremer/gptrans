@@ -3,15 +3,19 @@ package net.premereur.gae.transport.domain;
 import javax.persistence.EntityManager;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.wideplay.warp.persist.Transactional;
 
 public class JPAQuoteRequestRepository implements QuoteRequestRepository {
 
 	private final EntityManager entityManager;
 
+	private final Injector injector;
+	
 	@Inject
-	public JPAQuoteRequestRepository(EntityManager entityManager) {
+	public JPAQuoteRequestRepository(EntityManager entityManager, Injector injector) {
 		this.entityManager = entityManager;
+		this.injector = injector;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -28,7 +32,9 @@ public class JPAQuoteRequestRepository implements QuoteRequestRepository {
 
 	@Override
 	public QuoteRequest findByKey(Long key) {
-		return entityManager.find(QuoteRequest.class, key);
+		QuoteRequest quoteRequest = entityManager.find(QuoteRequest.class, key);
+		//injector.injectMembers(quoteRequest);
+		return quoteRequest;
 	}
 	
 	@Override

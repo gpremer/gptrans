@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,12 +21,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.joda.time.DateTime;
 
+import com.google.inject.Inject;
+import com.google.inject.internal.Nullable;
+
 @Entity
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(namespace = Constants.QUOTE_SCHEMA_NS)
 public class QuoteRequest {
 	private static final int TARIF_DECREASE_UNIT = 6;
 
+	@Inject
+	private Logger logger;
+	
 	@XmlAttribute
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,10 +47,13 @@ public class QuoteRequest {
 	private Integer numPackages;
 
 	private String customerReference;
-	
+
 	private String callbackURL;
 
-	public QuoteRequest(Date earliestShipmentTime, Date latestShipmentTime, Float weight, Integer numPackages, String customerReference, String callbackURL) {
+	@Inject
+	private CallbackService callbackService;
+
+	public QuoteRequest(Date earliestShipmentTime, Date latestShipmentTime, Float weight, Integer numPackages, String customerReference, @Nullable String callbackURL) {
 		super();
 		this.earliestShipmentTime = earliestShipmentTime;
 		this.latestShipmentTime = latestShipmentTime;
@@ -86,7 +96,7 @@ public class QuoteRequest {
 	public String getCustomerReference() {
 		return customerReference;
 	}
-	
+
 	public String getCallbackURL() {
 		return callbackURL;
 	}
@@ -95,7 +105,7 @@ public class QuoteRequest {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
-	
+
 	private static final <T> T valueWithDefault(T value, T defaultValue) {
 		return value == null ? defaultValue : value;
 	}
@@ -106,17 +116,36 @@ public class QuoteRequest {
 		DateTime validity = new DateTime().plusHours(8);
 		ArrayList<Quote> quotes = new ArrayList<Quote>();
 		BigDecimal price;
-		double basePrice = 5*(1+log(getNumPackages()))*log(max(2, getWeight())) ;
+		double basePrice = 5 * (1 + log(getNumPackages())) * log(max(2, getWeight()));
 		double discount = 1;
-		while ( next.isBefore(last) ) {
-			price  = new BigDecimal(basePrice * discount, new MathContext(2));			
+		while (next.isBefore(last)) {
+			price = new BigDecimal(basePrice * discount, new MathContext(2));
 			final Date start = next.toDate();
 			next = next.plusHours(TARIF_DECREASE_UNIT);
 			final Date end = next.toDate();
 			Quote quote = new Quote(this, validity.toDate(), price, start, end);
 			quotes.add(quote);
-			discount *= 0.95; 
+			discount *= 0.95;
 		}
 		return new Quotes(quotes);
 	}
+
+	public void scheduleCallback() {
+		if ( getCallbackService() == null ) {
+			logger.severe("A callback service has not been registered");
+			throw new IllegalStateException("No callback service has been installed on this QuoteRequest");
+		}
+		if (getCallbackURL() != null) {
+			getCallbackService().scheduleQuoteCallback(this, getCallbackURL());
+		}
+	}
+
+	public CallbackService getCallbackService() {
+		return callbackService;
+	}
+
+	public void setCallbackService(CallbackService callbackService) {
+		this.callbackService = callbackService;
+	}
+
 }

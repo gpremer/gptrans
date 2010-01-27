@@ -42,6 +42,7 @@ public class QuoteRequestsResource extends QuoteRequestResourceBase {
 			Representation rep = new StringRepresentation("Item created", MediaType.TEXT_PLAIN);
 			// Indicates where the new resource is located.
 			rep.setIdentifier(getRequest().getResourceRef().getIdentifier() + "/" + quoteRequest.getId());
+			quoteRequest.scheduleCallback();
 			return rep;
 		} catch (Exception e) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);

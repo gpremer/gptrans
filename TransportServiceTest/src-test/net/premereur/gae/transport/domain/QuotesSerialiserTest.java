@@ -23,8 +23,9 @@ public class QuotesSerialiserTest {
 	DateTime latestDate = new DateTime(2000, 1, 2, 5, 4, 5, 6);
 	QuoteRequest qr1 = new QuoteRequest(earliestDate.toDate(), latestDate.toDate(), 1.5f, 1, "#AAA");
 	QuoteRequest qr2 = new QuoteRequest(new Date(), new Date(), 2f, 1, "#AAB");
-	Quote q1 = new Quote(qr1, new BigDecimal("5.23"), earliestDate.toDate(), earliestDate.plusHours(4).toDate());
-	Quote q2 = new Quote(qr2, new BigDecimal("6.23"), latestDate.toDate(), latestDate.plusHours(4).toDate());
+	DateTime validity = new DateTime(2000, 1, 2, 4, 0, 0, 0);
+	Quote q1 = new Quote(qr1, validity.toDate(),new BigDecimal("5.23"), earliestDate.toDate(), earliestDate.plusHours(4).toDate());
+	Quote q2 = new Quote(qr2, validity.toDate(),new BigDecimal("6.23"), latestDate.toDate(), latestDate.plusHours(4).toDate());
 	Quotes quotes = new Quotes(Arrays.asList(q1, q2));
 
 	@Before

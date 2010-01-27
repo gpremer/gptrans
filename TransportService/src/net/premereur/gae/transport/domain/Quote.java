@@ -30,11 +30,14 @@ public class Quote {
 
 	private final Date pickupToTime;
 
+	private final Date validity;
+	
 	@Transient
 	private transient final QuoteRequest originator;
 
-	public Quote(final QuoteRequest originator, final BigDecimal price, final Date pickupFromTime, final Date pickupToTime) {
+	public Quote(final QuoteRequest originator, Date validity, final BigDecimal price, final Date pickupFromTime, final Date pickupToTime) {
 		this.originator = originator;
+		this.validity = validity;
 		this.price = price;
 		this.shipperReference = this.originator.getCustomerReference();
 		this.pickupFromTime = pickupFromTime;
@@ -44,6 +47,7 @@ public class Quote {
 	@SuppressWarnings("unused")
 	private Quote() {
 		this.originator = null;
+		this.validity = null;
 		this.price = null;
 		this.shipperReference = null;
 		this.pickupFromTime = null;
@@ -54,6 +58,10 @@ public class Quote {
 		return originator;
 	}
 
+	public Date getValidity() {
+		return validity;
+	}
+	
 	public BigDecimal getPrice() {
 		return this.price;
 	}

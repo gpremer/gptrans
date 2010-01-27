@@ -2,6 +2,7 @@ package net.premereur.gae.transport.service.servlet;
 
 import net.premereur.gae.transport.service.v1.resource.QuoteRequestResource;
 import net.premereur.gae.transport.service.v1.resource.QuoteRequestsResource;
+import net.premereur.gae.transport.service.v1.resource.QuotesResource;
 
 import org.restlet.Context;
 
@@ -28,7 +29,7 @@ public class ResourceRestletServlet extends GAERestletServlet {
 			protected void attachRoutes() {
 				attach("/v1/quoteRequests", QuoteRequestsResource.class);
 				attach("/v1/quoteRequests/{requestId}", QuoteRequestResource.class);
-				attach("/v1/quote/{}", QuoteRequestResource.class);
+				attach("/v1/quoteRequests/{requestId}/quotes", QuotesResource.class);
 			}
 		};
 	}

@@ -4,6 +4,7 @@ import static java.lang.Math.log;
 import static java.lang.Math.max;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -95,16 +96,17 @@ public class QuoteRequest {
 	public Quotes getQuotes() {
 		DateTime next = new DateTime(getEarliestShipmentTime());
 		DateTime last = new DateTime(getLatestShipmentTime());
+		DateTime validity = new DateTime().plusHours(8);
 		ArrayList<Quote> quotes = new ArrayList<Quote>();
 		BigDecimal price;
 		double basePrice = 5*(1+log(getNumPackages()))*log(max(2, getWeight())) ;
 		double discount = 1;
 		while ( next.isBefore(last) ) {
-			price  = new BigDecimal(basePrice * discount);			
+			price  = new BigDecimal(basePrice * discount, new MathContext(2));			
 			final Date start = next.toDate();
 			next = next.plusHours(TARIF_DECREASE_UNIT);
 			final Date end = next.toDate();
-			Quote quote = new Quote(this, price, start, end);
+			Quote quote = new Quote(this, validity.toDate(), price, start, end);
 			quotes.add(quote);
 			discount *= 0.95; 
 		}

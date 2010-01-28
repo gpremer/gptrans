@@ -49,7 +49,6 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 		qr2.setId(2l);
 	}
 
-	
 	@Test
 	public void shouldStoreQuoteRequestTransactionally() throws Exception {
 		repository.store(qr1);
@@ -72,20 +71,30 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 		assertNotNull(qrFound);
 		assertEquals(qr1.getId(), qrFound.getId());
 	}
-	
+
 	@Test
 	public void shouldCleanRepository() throws Exception {
 		repository.store(qr1);
 		repository.store(qr2);
 		repository.removeAll();
 		List<QuoteRequest> all = repository.findAll().getQuoteRequests();
-		assertEquals(0, all.size());		
+		assertEquals(0, all.size());
 	}
-	
+
 	@Test
-	public void shouldInjectAfterFind() throws Exception {
+	public void shouldInjectAfterFindByKey() throws Exception {
 		repository.store(qr1);
 		QuoteRequest qrFound = repository.findByKey(qr1.getId());
 		assertNotNull(qrFound.getCallbackService());
+	}
+
+	@Test
+	public void shouldInjectAfterFindAll() throws Exception {
+		repository.store(qr1);
+		repository.store(qr2);
+		List<QuoteRequest> all = repository.findAll().getQuoteRequests();
+		for (QuoteRequest qr : all) {
+			assertNotNull(qr.getCallbackService());
+		}
 	}
 }

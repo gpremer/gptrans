@@ -17,11 +17,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.joda.time.DateTime;
 
-import com.google.inject.Inject;
 import com.google.inject.internal.Nullable;
 
 @Entity
@@ -30,9 +30,9 @@ import com.google.inject.internal.Nullable;
 public class QuoteRequest {
 	private static final int TARIF_DECREASE_UNIT = 6;
 
-	@Inject
-	private Logger logger;
-	
+	@XmlTransient
+	private static final Logger LOGGER = Logger.getLogger(QuoteRequest.class.getCanonicalName());
+
 	@XmlAttribute
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,10 +50,8 @@ public class QuoteRequest {
 
 	private String callbackURL;
 
-	@Inject
-	private CallbackService callbackService;
-
-	public QuoteRequest(Date earliestShipmentTime, Date latestShipmentTime, Float weight, Integer numPackages, String customerReference, @Nullable String callbackURL) {
+	public QuoteRequest(Date earliestShipmentTime, Date latestShipmentTime, Float weight, Integer numPackages, String customerReference, @Nullable
+	String callbackURL) {
 		super();
 		this.earliestShipmentTime = earliestShipmentTime;
 		this.latestShipmentTime = latestShipmentTime;
@@ -131,8 +129,8 @@ public class QuoteRequest {
 	}
 
 	public void scheduleCallback() {
-		if ( getCallbackService() == null ) {
-			logger.severe("A callback service has not been registered");
+		if (getCallbackService() == null) {
+			LOGGER.severe("A callback service has not been registered");
 			throw new IllegalStateException("No callback service has been installed on this QuoteRequest");
 		}
 		if (getCallbackURL() != null) {
@@ -141,11 +139,7 @@ public class QuoteRequest {
 	}
 
 	public CallbackService getCallbackService() {
-		return callbackService;
-	}
-
-	public void setCallbackService(CallbackService callbackService) {
-		this.callbackService = callbackService;
+		return ServiceLocator.get().getCallbackService();
 	}
 
 }

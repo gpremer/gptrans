@@ -1,6 +1,5 @@
 package net.premereur.gae.transport.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -13,7 +12,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.joda.time.DateTime;
 
 @Entity
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -84,18 +82,5 @@ public class QuoteRequest {
 	
 	private static final <T> T valueWithDefault(T value, T defaultValue) {
 		return value == null ? defaultValue : value;
-	}
-
-	public Quotes getQuotes() {
-		DateTime next = new DateTime(getEarliestShipmentTime());
-		DateTime last = new DateTime(getLatestShipmentTime());
-		ArrayList<Quote> quotes = new ArrayList<Quote>();
-		while ( next.isBefore(last) ) {
-			Quote quote = new Quote(this);
-			quotes.add(quote);
-			next = next.plusHours(6);
-		}
-		return new Quotes(quotes);
-		
 	}
 }

@@ -12,16 +12,12 @@ import com.google.inject.Inject;
 
 public class CleanQuoteRequestsResource extends ServerResource {
 
-	protected final QuoteRequestRepository repository;
+	private final QuoteRequestRepository repository;
 
 	@Inject
 	public CleanQuoteRequestsResource(QuoteRequestRepository repository) {
 		super();
 		this.repository = repository;
-	}
-
-	protected QuoteRequestRepository getRepository() {
-		return repository;
 	}
 	
 	@Post

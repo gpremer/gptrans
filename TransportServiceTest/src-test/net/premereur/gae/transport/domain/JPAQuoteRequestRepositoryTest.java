@@ -39,8 +39,8 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 
 	DateTime earliestDate = new DateTime(2000, 1, 2, 3, 4, 5, 6);
 	DateTime latestDate = new DateTime(2000, 1, 2, 5, 4, 5, 6);
-	QuoteRequest qr1 = new QuoteRequest(earliestDate.toDate(), latestDate.toDate(), 1.5f, 1, "#AAA");
-	QuoteRequest qr2 = new QuoteRequest(new Date(), new Date(), 2f, 1, "#AAB");
+	QuoteRequest qr1 = new QuoteRequest(earliestDate.toDate(), latestDate.toDate(), 1.5f, 1, "#AAA", null);
+	QuoteRequest qr2 = new QuoteRequest(new Date(), new Date(), 2f, 1, "#AAB", null);
 	QuoteRequests qrs = new QuoteRequests(Arrays.asList(qr1, qr2));
 
 	@Before
@@ -49,7 +49,6 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 		qr2.setId(2l);
 	}
 
-	
 	@Test
 	public void shouldStoreQuoteRequestTransactionally() throws Exception {
 		repository.store(qr1);
@@ -71,15 +70,31 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 		QuoteRequest qrFound = repository.findByKey(qr1.getId());
 		assertNotNull(qrFound);
 		assertEquals(qr1.getId(), qrFound.getId());
-		
 	}
-	
+
 	@Test
 	public void shouldCleanRepository() throws Exception {
 		repository.store(qr1);
 		repository.store(qr2);
 		repository.removeAll();
 		List<QuoteRequest> all = repository.findAll().getQuoteRequests();
-		assertEquals(0, all.size());		
+		assertEquals(0, all.size());
 	}
+
+//	@Test
+//	public void shouldInjectAfterFindByKey() throws Exception {
+//		repository.store(qr1);
+//		QuoteRequest qrFound = repository.findByKey(qr1.getId());
+//		assertNotNull(qrFound.getScheduleService());
+//	}
+//
+//	@Test
+//	public void shouldInjectAfterFindAll() throws Exception {
+//		repository.store(qr1);
+//		repository.store(qr2);
+//		List<QuoteRequest> all = repository.findAll().getQuoteRequests();
+//		for (QuoteRequest qr : all) {
+//			assertNotNull(qr.getScheduleService());
+//		}
+//	}
 }

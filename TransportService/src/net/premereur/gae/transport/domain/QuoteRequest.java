@@ -1,7 +1,13 @@
 package net.premereur.gae.transport.domain;
 
+import static java.lang.Math.log;
+import static java.lang.Math.max;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,14 +17,22 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.joda.time.DateTime;
+
+import com.google.inject.internal.Nullable;
 
 @Entity
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(namespace = Constants.QUOTE_SCHEMA_NS)
 public class QuoteRequest {
+	private static final int TARIF_DECREASE_UNIT = 6;
+
+	@XmlTransient
+	private static final Logger LOGGER = Logger.getLogger(QuoteRequest.class.getCanonicalName());
+
 	@XmlAttribute
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,15 +46,19 @@ public class QuoteRequest {
 
 	private Integer numPackages;
 
-	private String shipperReference;
+	private String customerReference;
 
-	public QuoteRequest(Date earliestShipmentTime, Date latestShipmentTime, Float weight, Integer numPackages, String shipperReference) {
+	private String callbackURL;
+
+	public QuoteRequest(Date earliestShipmentTime, Date latestShipmentTime, Float weight, Integer numPackages, String customerReference, @Nullable
+	String callbackURL) {
 		super();
 		this.earliestShipmentTime = earliestShipmentTime;
 		this.latestShipmentTime = latestShipmentTime;
 		this.weight = weight;
 		this.numPackages = numPackages;
-		this.shipperReference = shipperReference;
+		this.customerReference = customerReference;
+		this.callbackURL = callbackURL;
 	}
 
 	@SuppressWarnings("unused")
@@ -73,15 +91,19 @@ public class QuoteRequest {
 		return valueWithDefault(numPackages, 1);
 	}
 
-	public String getShipperReference() {
-		return shipperReference;
+	public String getCustomerReference() {
+		return customerReference;
+	}
+
+	public String getCallbackURL() {
+		return callbackURL;
 	}
 
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
-	
+
 	private static final <T> T valueWithDefault(T value, T defaultValue) {
 		return value == null ? defaultValue : value;
 	}
@@ -89,13 +111,21 @@ public class QuoteRequest {
 	public Quotes getQuotes() {
 		DateTime next = new DateTime(getEarliestShipmentTime());
 		DateTime last = new DateTime(getLatestShipmentTime());
+		DateTime validity = new DateTime().plusHours(8);
 		ArrayList<Quote> quotes = new ArrayList<Quote>();
-		while ( next.isBefore(last) ) {
-			Quote quote = new Quote(this);
+		BigDecimal price;
+		double basePrice = 5 * (1 + log(getNumPackages())) * log(max(2, getWeight()));
+		double discount = 1;
+		while (next.isBefore(last)) {
+			price = new BigDecimal(basePrice * discount, new MathContext(2));
+			final Date start = next.toDate();
+			next = next.plusHours(TARIF_DECREASE_UNIT);
+			final Date end = next.toDate();
+			Quote quote = new Quote(this, validity.toDate(), price, start, end);
 			quotes.add(quote);
-			next = next.plusHours(6);
+			discount *= 0.95;
 		}
 		return new Quotes(quotes);
-		
 	}
+
 }

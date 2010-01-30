@@ -28,7 +28,8 @@ public class JPAQuoteRequestRepository implements QuoteRequestRepository {
 
 	@Override
 	public QuoteRequest findByKey(Long key) {
-		return entityManager.find(QuoteRequest.class, key);
+		QuoteRequest quoteRequest = entityManager.find(QuoteRequest.class, key);
+		return quoteRequest;
 	}
 	
 	@Override

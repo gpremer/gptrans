@@ -30,6 +30,10 @@ public class QuoteRequestResource extends QuoteRequestResourceBase {
 		super(repository);
 	}
 
+	protected QuoteRequest getQuoteRequest() {
+		return quoteRequest;
+	}
+	
 	@Override
 	protected void doInit() throws ResourceException {
 		Long quoteRequestId = getRequestId();

@@ -4,12 +4,12 @@ import com.google.inject.Inject;
 
 public class ServiceLocator {
 
-	private final CallbackService callbackService;
+	private final ScheduleService callbackService;
 
 	private static ServiceLocator singleton;
 
 	@Inject
-	ServiceLocator(final CallbackService callbackService) {
+	ServiceLocator(final ScheduleService callbackService) {
 		this.callbackService = callbackService;
 		singleton = this;
 	}
@@ -18,7 +18,7 @@ public class ServiceLocator {
 		return singleton;
 	}
 
-	public CallbackService getCallbackService() {
+	public ScheduleService getCallbackService() {
 		return callbackService;
 	}
 }

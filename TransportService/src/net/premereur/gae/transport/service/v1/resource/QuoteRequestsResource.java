@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import net.premereur.gae.transport.domain.QuoteRequest;
 import net.premereur.gae.transport.domain.QuoteRequestRepository;
 import net.premereur.gae.transport.domain.QuoteRequests;
+import net.premereur.gae.transport.domain.ScheduleService;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -19,14 +20,18 @@ import com.google.inject.Inject;
 
 public class QuoteRequestsResource extends QuoteRequestResourceBase {
 
-	@Inject
-	private Logger LOG;
-
+	// TODO inject this as well
 	private static final QuoteConverter converter = new QuoteConverter();
 
 	@Inject
-	public QuoteRequestsResource(QuoteRequestRepository repository) {
+	private Logger LOG;
+
+	private final ScheduleService scheduleService;
+
+	@Inject
+	public QuoteRequestsResource(QuoteRequestRepository repository, final ScheduleService scheduleService) {
 		super(repository);
+		this.scheduleService = scheduleService;
 	}
 
 	/**
@@ -42,7 +47,7 @@ public class QuoteRequestsResource extends QuoteRequestResourceBase {
 			Representation rep = new StringRepresentation("Item created", MediaType.TEXT_PLAIN);
 			// Indicates where the new resource is located.
 			rep.setIdentifier(getRequest().getResourceRef().getIdentifier() + "/" + quoteRequest.getId());
-			quoteRequest.scheduleCallback();
+			getScheduleService().scheduleQuoteComputation(quoteRequest);
 			return rep;
 		} catch (Exception e) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
@@ -61,4 +66,9 @@ public class QuoteRequestsResource extends QuoteRequestResourceBase {
 		// Generate the right representation according to its media type.
 		return new JaxbRepresentation<QuoteRequests>(getRepository().findAll());
 	}
+
+	public ScheduleService getScheduleService() {
+		return scheduleService;
+	}
+
 }

@@ -128,18 +128,4 @@ public class QuoteRequest {
 		return new Quotes(quotes);
 	}
 
-	public void scheduleCallback() {
-		if (getCallbackService() == null) {
-			LOGGER.severe("A callback service has not been registered");
-			throw new IllegalStateException("No callback service has been installed on this QuoteRequest");
-		}
-		if (getCallbackURL() != null) {
-			getCallbackService().scheduleQuoteCallback(this, getCallbackURL());
-		}
-	}
-
-	public CallbackService getCallbackService() {
-		return ServiceLocator.get().getCallbackService();
-	}
-
 }

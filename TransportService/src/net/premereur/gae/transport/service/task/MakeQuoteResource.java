@@ -5,9 +5,11 @@ import java.util.logging.Logger;
 
 import net.premereur.gae.transport.domain.QuoteRequest;
 import net.premereur.gae.transport.domain.QuoteRequestRepository;
+import net.premereur.gae.transport.domain.Quotes;
 import net.premereur.gae.transport.service.common.ResourceBase;
 
 import org.restlet.data.Status;
+import org.restlet.ext.jaxb.JaxbRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 
@@ -43,7 +45,6 @@ public class MakeQuoteResource extends ResourceBase {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			return null;
 		}
-		quoteRequest.getQuotes();
-		return null;
+		return new JaxbRepresentation<Quotes>(quoteRequest.getQuotes());
 	}
 }

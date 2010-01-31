@@ -6,6 +6,10 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
+import java.util.List;
+
+import net.premereur.gae.transport.domain.Quote;
+import net.premereur.gae.transport.domain.QuoteRequest;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -30,33 +34,33 @@ public class QuoteGenerationTest {
 
 	@Test
 	public void thereShouldBeOneQuoteInSmallTimeframe() throws Exception {
-		Quotes quotes = futureQuoteRequestSmallRange.getQuotes();
-		assertEquals(1, quotes.getQuotes().size());
+		List<Quote> quotes = futureQuoteRequestSmallRange.getQuotes();
+		assertEquals(1, quotes.size());
 	}
 
 	@Test
 	public void thereShouldBe2QuotesInIntermediateHourRange() throws Exception {
-		Quotes quotes = futureQuoteRequestIntermediateRange.getQuotes();
-		assertEquals(2, quotes.getQuotes().size());
+		List<Quote> quotes = futureQuoteRequestIntermediateRange.getQuotes();
+		assertEquals(2, quotes.size());
 	}
 
 	@Test
 	public void thereShouldBeMoreThan2QuotesInLargeHourRange() throws Exception {
-		Quotes quotes = futureQuoteRequestLargeRange.getQuotes();
-		assertTrue(quotes.getQuotes().size()>2);
+		List<Quote> quotes = futureQuoteRequestLargeRange.getQuotes();
+		assertTrue(quotes.size() > 2);
 	}
 
 	@Test
 	public void quotesShouldBeAboutRequest() throws Exception {
-		Quotes quotes = futureQuoteRequestSmallRange.getQuotes();
-		assertSame(futureQuoteRequestSmallRange, quotes.getQuotes().iterator().next().getOriginator());
+		List<Quote> quotes = futureQuoteRequestSmallRange.getQuotes();
+		assertSame(futureQuoteRequestSmallRange, quotes.iterator().next().getOriginator());
 	}
 	
 	@Test
 	public void quotePriceShouldBedifferent() throws Exception {
-		Quotes quotes = futureQuoteRequestLargeRange.getQuotes();
+		List<Quote> quotes = futureQuoteRequestLargeRange.getQuotes();
 		BigDecimal prevPrice = new BigDecimal(-1);
-		for ( Quote quote : quotes.getQuotes()) {
+		for (Quote quote : quotes) {
 			assertFalse(prevPrice.equals(quote.getPrice()));
 			prevPrice = quote.getPrice();
 		}

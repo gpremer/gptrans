@@ -20,6 +20,7 @@ import com.google.inject.Injector;
  * @author gpremer
  * 
  */
+@SuppressWarnings("serial")
 public abstract class GAERestletServlet extends HttpServlet {
 
 	@Inject
@@ -37,13 +38,12 @@ public abstract class GAERestletServlet extends HttpServlet {
 		adapter = new GAEServletAdapter(getServletContext());
 		adapter.setTarget(application);
 	}
-	
-	protected abstract GuiceRouter getGuiceRouter(Injector injector, Context context); 
+
+	protected abstract GuiceRouter getGuiceRouter(Injector injector, Context context);
 
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		adapter.service(request, response);
 	}
-
 
 }

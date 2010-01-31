@@ -1,5 +1,7 @@
-package net.premereur.gae.transport.domain;
+package net.premereur.gae.transport.service.v1.resource.serialisation;
 
+import static net.premereur.gae.testutil.Assertions.assertXmlTimeEquals;
+import static net.premereur.gae.transport.domain.DomainIdSetter.setId;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
@@ -7,6 +9,9 @@ import java.util.Date;
 
 import javax.xml.bind.JAXB;
 import javax.xml.transform.dom.DOMResult;
+
+import net.premereur.gae.testutil.XmlUtil;
+import net.premereur.gae.transport.domain.QuoteRequest;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -21,18 +26,18 @@ public class QuoteRequestSerialiserTest {
 	DateTime latestDate = new DateTime(2000, 1, 2, 5, 4, 5, 6);
 	QuoteRequest qr1 = new QuoteRequest(earliestDate.toDate(), latestDate.toDate(), 1.5f, 1, "#AAA", "http://localhost/callback");
 	QuoteRequest qr2 = new QuoteRequest(new Date(), new Date(), 2f, 1, "#AAB", null);
-	QuoteRequests qrs = new QuoteRequests(Arrays.asList(qr1, qr2));
+	XmlQuoteRequests qrs = new XmlQuoteRequests(Arrays.asList(qr1, qr2));
 
 	@Before
 	public void setupFixture() {
-		qr1.setId(1l);
-		qr2.setId(2l);
+		setId(qr1, 1l);
+		setId(qr2, 2l);
 	}
 
 	@Test
 	public void shouldCreateXmlWithProperElementName() throws Exception {
 		DOMResult result = new DOMResult();
-		JAXB.marshal(qr2, result);
+		JAXB.marshal(new XmlQuoteRequest(qr2), result);
 		Node root = result.getNode();
 		Element eltNode = (Element) root.getFirstChild();
 		assertEquals("quoteRequest", eltNode.getLocalName());
@@ -42,15 +47,15 @@ public class QuoteRequestSerialiserTest {
 	@Test
 	public void shouldCreateXmlWithAllFields() throws Exception {
 		DOMResult result = new DOMResult();
-		JAXB.marshal(qr1, result);
+		JAXB.marshal(new XmlQuoteRequest(qr1), result);
 		Node root = result.getNode();
 		Element eltNode = (Element) root.getFirstChild();
 		assertEquals("1", eltNode.getAttribute("id"));
 		assertEquals("1.5", eltNode.getElementsByTagName("weight").item(0).getTextContent());
 		assertEquals("1", eltNode.getElementsByTagName("numPackages").item(0).getTextContent());
 		assertEquals("#AAA", eltNode.getElementsByTagName("customerReference").item(0).getTextContent());
-		assertEquals("2000-01-02T03:04:05.006Z", eltNode.getElementsByTagName("earliestShipmentTime").item(0).getTextContent());
-		assertEquals("2000-01-02T05:04:05.006Z", eltNode.getElementsByTagName("latestShipmentTime").item(0).getTextContent());
+		assertXmlTimeEquals("2000-01-02T03:04:05.006Z", eltNode.getElementsByTagName("earliestShipmentTime").item(0).getTextContent());
+		assertXmlTimeEquals("2000-01-02T05:04:05.006Z", eltNode.getElementsByTagName("latestShipmentTime").item(0).getTextContent());
 		assertEquals("http://localhost/callback", eltNode.getElementsByTagName("callbackURL").item(0).getTextContent());
 	}
 
@@ -65,6 +70,7 @@ public class QuoteRequestSerialiserTest {
 
 	@Test
 	public void shouldCreateXmlWithContainedElements() throws Exception {
+		XmlUtil.dumpSerialisation(qrs);
 		DOMResult result = new DOMResult();
 		JAXB.marshal(qrs, result);
 		Node root = result.getNode();

@@ -1,5 +1,6 @@
 package net.premereur.gae.transport.domain;
 
+import static net.premereur.gae.transport.domain.DomainIdSetter.setId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 import net.premereur.gae.LocalAppEngineServiceTestCase;
 import net.premereur.gae.transport.service.servlet.ResourceModule;
+import net.premereur.gae.transport.service.v1.resource.serialisation.XmlQuoteRequests;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -41,12 +43,12 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 	DateTime latestDate = new DateTime(2000, 1, 2, 5, 4, 5, 6);
 	QuoteRequest qr1 = new QuoteRequest(earliestDate.toDate(), latestDate.toDate(), 1.5f, 1, "#AAA", null);
 	QuoteRequest qr2 = new QuoteRequest(new Date(), new Date(), 2f, 1, "#AAB", null);
-	QuoteRequests qrs = new QuoteRequests(Arrays.asList(qr1, qr2));
+	XmlQuoteRequests qrs = new XmlQuoteRequests(Arrays.asList(qr1, qr2));
 
 	@Before
 	public void setupFixture() {
-		qr1.setId(1l);
-		qr2.setId(2l);
+		setId(qr1, 1l);
+		setId(qr2, 2l);
 	}
 
 	@Test
@@ -59,7 +61,7 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 	public void shouldLoadAllQuoteRequests() throws Exception {
 		repository.store(qr1);
 		repository.store(qr2);
-		List<QuoteRequest> all = repository.findAll().getQuoteRequests();
+		List<QuoteRequest> all = repository.findAll();
 		assertNotNull(all);
 		assertEquals(2, all.size());
 	}
@@ -77,24 +79,24 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 		repository.store(qr1);
 		repository.store(qr2);
 		repository.removeAll();
-		List<QuoteRequest> all = repository.findAll().getQuoteRequests();
+		List<QuoteRequest> all = repository.findAll();
 		assertEquals(0, all.size());
 	}
 
-//	@Test
-//	public void shouldInjectAfterFindByKey() throws Exception {
-//		repository.store(qr1);
-//		QuoteRequest qrFound = repository.findByKey(qr1.getId());
-//		assertNotNull(qrFound.getScheduleService());
-//	}
-//
-//	@Test
-//	public void shouldInjectAfterFindAll() throws Exception {
-//		repository.store(qr1);
-//		repository.store(qr2);
-//		List<QuoteRequest> all = repository.findAll().getQuoteRequests();
-//		for (QuoteRequest qr : all) {
-//			assertNotNull(qr.getScheduleService());
-//		}
-//	}
+	// @Test
+	// public void shouldInjectAfterFindByKey() throws Exception {
+	// repository.store(qr1);
+	// QuoteRequest qrFound = repository.findByKey(qr1.getId());
+	// assertNotNull(qrFound.getScheduleService());
+	// }
+	//
+	// @Test
+	// public void shouldInjectAfterFindAll() throws Exception {
+	// repository.store(qr1);
+	// repository.store(qr2);
+	// List<QuoteRequest> all = repository.findAll().getQuoteRequests();
+	// for (QuoteRequest qr : all) {
+	// assertNotNull(qr.getScheduleService());
+	// }
+	// }
 }

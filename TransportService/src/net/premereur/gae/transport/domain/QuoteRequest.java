@@ -7,17 +7,13 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.joda.time.DateTime;
@@ -25,15 +21,12 @@ import org.joda.time.DateTime;
 import com.google.inject.internal.Nullable;
 
 @Entity
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(namespace = Constants.QUOTE_SCHEMA_NS)
 public class QuoteRequest {
 	private static final int TARIF_DECREASE_UNIT = 6;
 
-	@XmlTransient
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = Logger.getLogger(QuoteRequest.class.getCanonicalName());
 
-	@XmlAttribute
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -108,7 +101,7 @@ public class QuoteRequest {
 		return value == null ? defaultValue : value;
 	}
 
-	public Quotes getQuotes() {
+	public List<Quote> getQuotes() {
 		DateTime next = new DateTime(getEarliestShipmentTime());
 		DateTime last = new DateTime(getLatestShipmentTime());
 		DateTime validity = new DateTime().plusHours(8);
@@ -125,7 +118,7 @@ public class QuoteRequest {
 			quotes.add(quote);
 			discount *= 0.95;
 		}
-		return new Quotes(quotes);
+		return quotes;
 	}
 
 }

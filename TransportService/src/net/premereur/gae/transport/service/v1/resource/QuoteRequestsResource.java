@@ -5,8 +5,8 @@ import java.util.logging.Logger;
 
 import net.premereur.gae.transport.domain.QuoteRequest;
 import net.premereur.gae.transport.domain.QuoteRequestRepository;
-import net.premereur.gae.transport.domain.QuoteRequests;
 import net.premereur.gae.transport.domain.ScheduleService;
+import net.premereur.gae.transport.service.v1.resource.serialisation.XmlQuoteRequests;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -59,12 +59,11 @@ public class QuoteRequestsResource extends QuoteRequestResourceBase {
 	/**
 	 * Returns a listing of all registered items.
 	 */
-	@SuppressWarnings("unchecked")
 	@Get("xml")
 	public Representation toXml() {
 		LOG.info("listing all requests");
 		// Generate the right representation according to its media type.
-		return new JaxbRepresentation<QuoteRequests>(getRepository().findAll());
+		return new JaxbRepresentation<XmlQuoteRequests>(new XmlQuoteRequests(getRepository().findAll()));
 	}
 
 	public ScheduleService getScheduleService() {

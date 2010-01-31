@@ -1,5 +1,6 @@
-package net.premereur.gae.transport.domain;
+package net.premereur.gae.transport.service.v1.resource.serialisation;
 
+import static net.premereur.gae.transport.domain.DomainIdSetter.setId;
 import static org.junit.Assert.assertEquals;
 
 import java.io.StringWriter;
@@ -9,6 +10,9 @@ import java.util.Date;
 
 import javax.xml.bind.JAXB;
 import javax.xml.transform.dom.DOMResult;
+
+import net.premereur.gae.transport.domain.Quote;
+import net.premereur.gae.transport.domain.QuoteRequest;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -26,12 +30,12 @@ public class QuotesSerialiserTest {
 	DateTime validity = new DateTime(2000, 1, 2, 4, 0, 0, 0);
 	Quote q1 = new Quote(qr1, validity.toDate(),new BigDecimal("5.23"), earliestDate.toDate(), earliestDate.plusHours(4).toDate());
 	Quote q2 = new Quote(qr2, validity.toDate(),new BigDecimal("6.23"), latestDate.toDate(), latestDate.plusHours(4).toDate());
-	Quotes quotes = new Quotes(Arrays.asList(q1, q2));
+	XmlQuotes quotes = new XmlQuotes(Arrays.asList(q1, q2));
 
 	@Before
 	public void setupFixture() {
-		qr1.setId(1l);
-		qr2.setId(2l);
+		setId(qr1, 1l);
+		setId(qr2, 2l);
 	}
 
 	@Test

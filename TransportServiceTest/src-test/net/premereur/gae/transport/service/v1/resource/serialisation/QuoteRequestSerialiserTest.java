@@ -10,7 +10,6 @@ import java.util.Date;
 import javax.xml.bind.JAXB;
 import javax.xml.transform.dom.DOMResult;
 
-import net.premereur.gae.testutil.XmlUtil;
 import net.premereur.gae.transport.domain.QuoteRequest;
 
 import org.joda.time.DateTime;
@@ -70,7 +69,6 @@ public class QuoteRequestSerialiserTest {
 
 	@Test
 	public void shouldCreateXmlWithContainedElements() throws Exception {
-		XmlUtil.dumpSerialisation(qrs);
 		DOMResult result = new DOMResult();
 		JAXB.marshal(qrs, result);
 		Node root = result.getNode();

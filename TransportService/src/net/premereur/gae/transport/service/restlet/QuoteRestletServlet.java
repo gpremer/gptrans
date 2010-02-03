@@ -1,8 +1,10 @@
-package net.premereur.gae.transport.service.servlet;
+package net.premereur.gae.transport.service.restlet;
 
 import net.premereur.gae.transport.service.quote.v1.QuoteRequestResource;
 import net.premereur.gae.transport.service.quote.v1.QuoteRequestsResource;
 import net.premereur.gae.transport.service.quote.v1.QuotesResource;
+import net.premereur.gae.transport.service.servlet.GAERestletServlet;
+import net.premereur.gae.transport.service.servlet.GuiceRouter;
 
 import org.restlet.Context;
 

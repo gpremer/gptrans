@@ -1,6 +1,7 @@
-package net.premereur.gae.transport.service.servlet;
+package net.premereur.gae.transport.service.restlet;
 
-import net.premereur.gae.transport.service.admin.CleanQuoteRequestsResource;
+import net.premereur.gae.transport.service.servlet.GAERestletServlet;
+import net.premereur.gae.transport.service.servlet.GuiceRouter;
 import net.premereur.gae.transport.service.task.MakeQuoteResource;
 
 import org.restlet.Context;
@@ -27,7 +28,6 @@ public class TaskRestletServlet extends GAERestletServlet {
 		return new GuiceRouter(injector, context) {
 			@Override
 			protected void attachRoutes() {
-				attach("/admin/cleanQuoteRequests", CleanQuoteRequestsResource.class);
 				attach("/quotesByRequestId/{requestId}", MakeQuoteResource.class);
 			}
 		};

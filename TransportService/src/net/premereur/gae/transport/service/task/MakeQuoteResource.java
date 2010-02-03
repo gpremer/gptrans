@@ -38,9 +38,9 @@ public class MakeQuoteResource extends ResourceBase {
 		Long quoteRequestId = getRequestId();
 		try {
 			final QuoteRequest quoteRequest = getRepository().findByKey(quoteRequestId);
-			quoteRequest.getQuotes();
+			quoteRequest.computeQuotesIfNotAvailableYet();
 			setStatus(Status.SUCCESS_OK);
-			return new StringRepresentation("Item created", MediaType.TEXT_PLAIN);
+			return new StringRepresentation("Quotes are ready", MediaType.TEXT_PLAIN);
 		} catch (Exception e) {
 			logger.log(Level.INFO, "Couldn't retrieve quoteRequest with key " + quoteRequestId, e);
 			setExisting(false);

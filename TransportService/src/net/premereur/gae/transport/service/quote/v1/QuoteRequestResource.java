@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import net.premereur.gae.transport.domain.QuoteRequest;
 import net.premereur.gae.transport.domain.QuoteRequestRepository;
+import net.premereur.gae.transport.service.quote.v1.serialisation.XmlQuoteRequest;
 
 import org.restlet.data.Status;
 import org.restlet.ext.jaxb.JaxbRepresentation;
@@ -68,6 +69,6 @@ public class QuoteRequestResource extends QuoteRequestResourceBase {
 
 	@Get("xml")
 	public Representation toXml() {
-		return new JaxbRepresentation<QuoteRequest>(quoteRequest);
+		return new JaxbRepresentation<XmlQuoteRequest>(new XmlQuoteRequest(quoteRequest));
 	}
 }

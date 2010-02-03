@@ -10,6 +10,7 @@ import com.google.appengine.api.labs.taskqueue.Queue;
 import com.google.appengine.api.labs.taskqueue.QueueFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
+import com.google.inject.servlet.RequestScoped;
 import com.wideplay.warp.persist.jpa.JpaUnit;
 
 /**
@@ -24,7 +25,7 @@ public class ResourceModule extends AbstractModule {
 	protected void configure() {
 		bind(PersistenceInitialiser.class).asEagerSingleton();
 		bind(ServiceLocator.class).asEagerSingleton();
-		bind(QuoteRequestRepository.class).to(JPAQuoteRequestRepository.class);
+		bind(QuoteRequestRepository.class).to(JPAQuoteRequestRepository.class).in(RequestScoped.class);
 		bindConstant().annotatedWith(JpaUnit.class).to("transactions-optional");
 		bind(ScheduleService.class).to(TaskQueueScheduleService.class);
 	

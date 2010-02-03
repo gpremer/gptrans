@@ -3,6 +3,7 @@ package net.premereur.gae.transport.domain;
 import static net.premereur.gae.transport.domain.DomainIdSetter.setId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -10,17 +11,19 @@ import java.util.List;
 
 import net.premereur.gae.LocalAppEngineServiceTestCase;
 import net.premereur.gae.transport.service.quote.v1.serialisation.XmlQuoteRequests;
-import net.premereur.gae.transport.service.servlet.ResourceModule;
+import net.premereur.gae.transport.service.servlet.PersistenceInitialiser;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.wideplay.warp.persist.PersistenceService;
 import com.wideplay.warp.persist.UnitOfWork;
+import com.wideplay.warp.persist.jpa.JpaUnit;
 
 public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase {
 
@@ -30,7 +33,18 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 
 	@BeforeClass
 	static public void initGuice() {
-		injector = Guice.createInjector(new ResourceModule(), PersistenceService.usingJpa().across(UnitOfWork.REQUEST).buildModule());
+		injector = Guice.createInjector(new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(PersistenceInitialiser.class).asEagerSingleton();
+				bind(ServiceLocator.class).asEagerSingleton();
+				bind(ScheduleService.class).toInstance(mock(ScheduleService.class));
+				bind(QuoteRequestRepository.class).to(JPAQuoteRequestRepository.class);
+				bindConstant().annotatedWith(JpaUnit.class).to("transactions-optional");				
+			}
+			
+		}, PersistenceService.usingJpa().across(UnitOfWork.REQUEST).buildModule());
 	}
 
 	@Before
@@ -83,20 +97,8 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 		assertEquals(0, all.size());
 	}
 
-	// @Test
-	// public void shouldInjectAfterFindByKey() throws Exception {
-	// repository.store(qr1);
-	// QuoteRequest qrFound = repository.findByKey(qr1.getId());
-	// assertNotNull(qrFound.getScheduleService());
-	// }
-	//
-	// @Test
-	// public void shouldInjectAfterFindAll() throws Exception {
-	// repository.store(qr1);
-	// repository.store(qr2);
-	// List<QuoteRequest> all = repository.findAll().getQuoteRequests();
-	// for (QuoteRequest qr : all) {
-	// assertNotNull(qr.getScheduleService());
-	// }
-	// }
+	@Test
+	public void shouldStoreInRepositoryAfterCompute() throws Exception {
+		qr1.computeQuotesIfNotAvailableYet();
+	}
 }

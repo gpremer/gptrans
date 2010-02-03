@@ -9,7 +9,6 @@ import com.wideplay.warp.persist.UnitOfWork;
 public class ServletConfig extends GuiceServletContextListener {
 	@Override
 	protected Injector getInjector() {
-		// Further modules are omitted...
 		return Guice.createInjector(new ServletModule(), new ResourceModule(), PersistenceService.usingJpa().across(UnitOfWork.REQUEST).buildModule());
 	}
 }

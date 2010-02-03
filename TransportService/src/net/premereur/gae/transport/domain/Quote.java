@@ -9,11 +9,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+import org.datanucleus.jpa.annotations.Extension;
+
 @Entity
 public class Quote {
+	@SuppressWarnings("unused")
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY) 
+	@Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
+	private String id;
 
 	private final BigDecimal price;
 
@@ -61,10 +65,6 @@ public class Quote {
 
 	public String getShipperReference() {
 		return this.shipperReference;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	public Date getPickupFromTime() {

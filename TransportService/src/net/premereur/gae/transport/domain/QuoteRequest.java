@@ -6,14 +6,17 @@ import static java.lang.Math.max;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.joda.time.DateTime;
@@ -42,6 +45,9 @@ public class QuoteRequest {
 	private String customerReference;
 
 	private String callbackURL;
+
+	@OneToMany(cascade=CascadeType.ALL)
+	private List<Quote> quotes = Collections.emptyList();
 
 	public QuoteRequest(Date earliestShipmentTime, Date latestShipmentTime, Float weight, Integer numPackages, String customerReference, @Nullable
 	String callbackURL) {
@@ -102,12 +108,23 @@ public class QuoteRequest {
 	}
 
 	public List<Quote> getQuotes() {
+		computeQuotesIfNotAvailableYet();
+		return quotes;
+	}
+
+	public void computeQuotesIfNotAvailableYet() {
+		if (quotes.isEmpty()) {
+			computeQuotes();			
+		}
+	}
+
+	private void computeQuotes() {
 		DateTime next = new DateTime(getEarliestShipmentTime());
 		DateTime last = new DateTime(getLatestShipmentTime());
 		DateTime validity = new DateTime().plusHours(8);
-		ArrayList<Quote> quotes = new ArrayList<Quote>();
+		quotes = new ArrayList<Quote>();
 		BigDecimal price;
-		double basePrice = 5 * (1 + log(getNumPackages())) * log(max(2, getWeight()));
+		double basePrice = 5.0 * (1 + log(getNumPackages())) * log(max(2, getWeight()));
 		double discount = 1;
 		while (next.isBefore(last)) {
 			price = new BigDecimal(basePrice * discount, new MathContext(2));
@@ -118,7 +135,7 @@ public class QuoteRequest {
 			quotes.add(quote);
 			discount *= 0.95;
 		}
-		return quotes;
+		ServiceLocator.get().getQuoteRequestRepository().store(this);
 	}
 
 }

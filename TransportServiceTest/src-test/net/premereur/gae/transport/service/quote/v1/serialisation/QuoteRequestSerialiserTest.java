@@ -1,4 +1,4 @@
-package net.premereur.gae.transport.service.v1.resource.serialisation;
+package net.premereur.gae.transport.service.quote.v1.serialisation;
 
 import static net.premereur.gae.testutil.Assertions.assertXmlTimeEquals;
 import static net.premereur.gae.transport.domain.DomainIdSetter.setId;
@@ -11,6 +11,8 @@ import javax.xml.bind.JAXB;
 import javax.xml.transform.dom.DOMResult;
 
 import net.premereur.gae.transport.domain.QuoteRequest;
+import net.premereur.gae.transport.service.quote.v1.serialisation.XmlQuoteRequest;
+import net.premereur.gae.transport.service.quote.v1.serialisation.XmlQuoteRequests;
 
 import org.joda.time.DateTime;
 import org.junit.Before;

@@ -9,8 +9,8 @@ import java.util.Date;
 import java.util.List;
 
 import net.premereur.gae.LocalAppEngineServiceTestCase;
+import net.premereur.gae.transport.service.quote.v1.serialisation.XmlQuoteRequests;
 import net.premereur.gae.transport.service.servlet.ResourceModule;
-import net.premereur.gae.transport.service.v1.resource.serialisation.XmlQuoteRequests;
 
 import org.joda.time.DateTime;
 import org.junit.Before;

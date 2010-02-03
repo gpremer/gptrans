@@ -1,4 +1,4 @@
-package net.premereur.gae.transport.service.v1.resource;
+package net.premereur.gae.transport.service.quote.v1;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import net.premereur.gae.transport.domain.QuoteRequest;
 import net.premereur.gae.transport.domain.QuoteRequestRepository;
 import net.premereur.gae.transport.domain.ScheduleService;
-import net.premereur.gae.transport.service.v1.resource.serialisation.XmlQuoteRequests;
+import net.premereur.gae.transport.service.quote.v1.serialisation.XmlQuoteRequests;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;

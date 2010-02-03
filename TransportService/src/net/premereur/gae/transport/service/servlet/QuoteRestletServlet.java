@@ -1,8 +1,8 @@
 package net.premereur.gae.transport.service.servlet;
 
-import net.premereur.gae.transport.service.v1.resource.QuoteRequestResource;
-import net.premereur.gae.transport.service.v1.resource.QuoteRequestsResource;
-import net.premereur.gae.transport.service.v1.resource.QuotesResource;
+import net.premereur.gae.transport.service.quote.v1.QuoteRequestResource;
+import net.premereur.gae.transport.service.quote.v1.QuoteRequestsResource;
+import net.premereur.gae.transport.service.quote.v1.QuotesResource;
 
 import org.restlet.Context;
 
@@ -16,7 +16,7 @@ import com.google.inject.Singleton;
  * 
  */
 @Singleton
-public class ResourceRestletServlet extends GAERestletServlet {
+public class QuoteRestletServlet extends GAERestletServlet {
 	/**
 	 * Class version.
 	 */

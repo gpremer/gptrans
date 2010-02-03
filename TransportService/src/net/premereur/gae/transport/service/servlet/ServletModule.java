@@ -17,7 +17,7 @@ public class ServletModule extends com.google.inject.servlet.ServletModule {
 	@Override
 	protected void configureServlets() {
 		filter(TRANSPORT_URL_PATTERN).through(PersistenceFilter.class);
-		serve(TRANSPORT_SERVICE_URL_PATTERN).with(ResourceRestletServlet.class);
+		serve(TRANSPORT_SERVICE_URL_PATTERN).with(QuoteRestletServlet.class);
 		serve(TRANSPORT_TASK_URL_PATTERN).with(TaskRestletServlet.class);
 	}
 

@@ -1,4 +1,4 @@
-package net.premereur.gae.transport.service.v1.resource;
+package net.premereur.gae.transport.service.quote.v1;
 
 import java.io.IOException;
 import java.util.logging.Level;

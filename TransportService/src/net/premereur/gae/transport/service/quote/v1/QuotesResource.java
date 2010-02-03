@@ -1,7 +1,7 @@
-package net.premereur.gae.transport.service.v1.resource;
+package net.premereur.gae.transport.service.quote.v1;
 
 import net.premereur.gae.transport.domain.QuoteRequestRepository;
-import net.premereur.gae.transport.service.v1.resource.serialisation.XmlQuotes;
+import net.premereur.gae.transport.service.quote.v1.serialisation.XmlQuotes;
 
 import org.restlet.ext.jaxb.JaxbRepresentation;
 import org.restlet.representation.Representation;

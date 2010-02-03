@@ -1,4 +1,4 @@
-package net.premereur.gae.transport.service.v1.resource.serialisation;
+package net.premereur.gae.transport.service.quote.v1.serialisation;
 
 import java.io.Serializable;
 import java.util.ArrayList;

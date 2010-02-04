@@ -9,7 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Collection;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -55,31 +55,31 @@ public class QuoteGenerationTest {
 
 	@Test
 	public void thereShouldBeOneQuoteInSmallTimeframe() throws Exception {
-		List<Quote> quotes = futureQuoteRequestSmallRange.getQuotes();
+		Collection<Quote> quotes = futureQuoteRequestSmallRange.getQuotes();
 		assertEquals(1, quotes.size());
 	}
 
 	@Test
 	public void thereShouldBe2QuotesInIntermediateHourRange() throws Exception {
-		List<Quote> quotes = futureQuoteRequestIntermediateRange.getQuotes();
+		Collection<Quote> quotes = futureQuoteRequestIntermediateRange.getQuotes();
 		assertEquals(2, quotes.size());
 	}
 
 	@Test
 	public void thereShouldBeMoreThan2QuotesInLargeHourRange() throws Exception {
-		List<Quote> quotes = futureQuoteRequestLargeRange.getQuotes();
+		Collection<Quote> quotes = futureQuoteRequestLargeRange.getQuotes();
 		assertTrue(quotes.size() > 2);
 	}
 
 	@Test
 	public void quotesShouldBeAboutRequest() throws Exception {
-		List<Quote> quotes = futureQuoteRequestSmallRange.getQuotes();
+		Collection<Quote> quotes = futureQuoteRequestSmallRange.getQuotes();
 		assertSame(futureQuoteRequestSmallRange, quotes.iterator().next().getOriginator());
 	}
 
 	@Test
 	public void quotePriceShouldBedifferent() throws Exception {
-		List<Quote> quotes = futureQuoteRequestLargeRange.getQuotes();
+		Collection<Quote> quotes = futureQuoteRequestLargeRange.getQuotes();
 		BigDecimal prevPrice = new BigDecimal(-1);
 		for (Quote quote : quotes) {
 			assertFalse(prevPrice.equals(quote.getPrice()));

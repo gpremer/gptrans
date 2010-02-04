@@ -2,6 +2,7 @@ package net.premereur.gae.transport.service.quote.v1.serialisation;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class XmlQuotes implements Serializable {
 	@XmlElement(name = "quote")
 	private final List<XmlQuote> quotes;
 
-	public XmlQuotes(List<Quote> quotes) {
+	public XmlQuotes(Collection<Quote> quotes) {
 		this.quotes = new ArrayList<XmlQuote>();
 		for (Quote q : quotes) {
 			this.quotes.add(new XmlQuote(q));

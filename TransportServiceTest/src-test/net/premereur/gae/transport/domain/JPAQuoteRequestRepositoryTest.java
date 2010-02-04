@@ -2,6 +2,7 @@ package net.premereur.gae.transport.domain;
 
 import static net.premereur.gae.transport.domain.DomainIdSetter.setId;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 
@@ -100,5 +101,10 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 	@Test
 	public void shouldStoreInRepositoryAfterCompute() throws Exception {
 		qr1.computeQuotesIfNotAvailableYet();
+		Quote firstQuote = qr1.getQuotes().iterator().next();
+		assertNotNull(firstQuote.getValidity());
+		QuoteRequest storedQr = repository.findByKey(qr1.getId());
+		assertFalse(storedQr.getQuotes().isEmpty());
+		assertNotNull(storedQr.getQuotes().iterator().next().getValidity());
 	}
 }

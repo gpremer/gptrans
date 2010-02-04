@@ -3,11 +3,12 @@ package net.premereur.gae.transport.domain;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.ManyToOne;
 
 import org.datanucleus.jpa.annotations.Extension;
 
@@ -15,22 +16,22 @@ import org.datanucleus.jpa.annotations.Extension;
 public class Quote {
 	@SuppressWarnings("unused")
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	@Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
 	private String id;
 
-	private final BigDecimal price;
+	private BigDecimal price;
 
-	private final String shipperReference;
+	private String shipperReference;
 
-	private final Date pickupFromTime;
+	private Date pickupFromTime;
 
-	private final Date pickupToTime;
+	private Date pickupToTime;
 
-	private final Date validity;
-	
-	@Transient
-	private transient final QuoteRequest originator;
+	private Date validity;
+
+	@ManyToOne(cascade = CascadeType.REFRESH)
+	private QuoteRequest originator;
 
 	public Quote(final QuoteRequest originator, Date validity, final BigDecimal price, final Date pickupFromTime, final Date pickupToTime) {
 		this.originator = originator;
@@ -50,7 +51,7 @@ public class Quote {
 		this.pickupFromTime = null;
 		this.pickupToTime = null;
 	}
-	
+
 	public QuoteRequest getOriginator() {
 		return originator;
 	}
@@ -58,7 +59,7 @@ public class Quote {
 	public Date getValidity() {
 		return validity;
 	}
-	
+
 	public BigDecimal getPrice() {
 		return this.price;
 	}

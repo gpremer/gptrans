@@ -25,7 +25,7 @@ public class JPAQuoteRequestRepository implements QuoteRequestRepository {
 	@Override
 	@Transactional
 	public void store(QuoteRequest qr) {
-		entityManager.persist(qr);
+		entityManager.merge(qr);
 	}
 
 	@Override

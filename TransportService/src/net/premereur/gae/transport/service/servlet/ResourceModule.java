@@ -28,9 +28,9 @@ public class ResourceModule extends AbstractModule {
 		bind(QuoteRequestRepository.class).to(JPAQuoteRequestRepository.class).in(RequestScoped.class);
 		bindConstant().annotatedWith(JpaUnit.class).to("transactions-optional");
 		bind(ScheduleService.class).to(TaskQueueScheduleService.class);
-	
-		bind(Queue.class).annotatedWith(Names.named("quoteCompute")).toInstance(QueueFactory.getDefaultQueue());
-		bind(String.class).annotatedWith(Names.named("quoteComputeTask")).toInstance("/transport/tasks/quotesByRequestId");
+
+		bind(Queue.class).annotatedWith(Names.named(TaskQueueScheduleService.QUOTE_COMPUTE_QUEUE)).toInstance(QueueFactory.getDefaultQueue());
+		bind(String.class).annotatedWith(Names.named(TaskQueueScheduleService.QUOTE_COMPUTE_TASK_URL)).toInstance("/transport/tasks/quotesByRequestId");
 	}
-	
+
 }

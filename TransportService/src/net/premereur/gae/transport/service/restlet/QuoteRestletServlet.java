@@ -32,6 +32,7 @@ public class QuoteRestletServlet extends GAERestletServlet {
 				attach("/v1/quoteRequests", QuoteRequestsResource.class);
 				attach("/v1/quoteRequests/{requestId}", QuoteRequestResource.class);
 				attach("/v1/quoteRequests/{requestId}/quotes", QuotesResource.class);
+				attach("/v1/transportDemands", QuotesResource.class);
 			}
 		};
 	}

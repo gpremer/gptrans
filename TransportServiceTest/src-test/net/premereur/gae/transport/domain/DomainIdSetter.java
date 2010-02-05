@@ -11,4 +11,9 @@ public final class DomainIdSetter {
 	public static void setId(QuoteRequest qr, Long value) {
 		qr.setId(value);
 	}
+
+	public static void setId(Quote q, String value) {
+		q.setId(value);
+	}
+
 }

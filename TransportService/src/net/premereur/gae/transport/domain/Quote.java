@@ -52,6 +52,15 @@ public class Quote {
 		this.pickupToTime = null;
 	}
 
+	public String getId() {
+		return id;
+	}
+	
+	// For unit testing, because of datanucleus
+	void setId(String id) {
+		this.id = id;
+	}
+	
 	public QuoteRequest getOriginator() {
 		return originator;
 	}

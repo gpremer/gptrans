@@ -13,8 +13,6 @@ import javax.xml.transform.dom.DOMResult;
 
 import net.premereur.gae.transport.domain.Quote;
 import net.premereur.gae.transport.domain.QuoteRequest;
-import net.premereur.gae.transport.service.quote.v1.serialisation.XmlQuote;
-import net.premereur.gae.transport.service.quote.v1.serialisation.XmlQuotes;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -37,6 +35,7 @@ public class QuoteSerialiserTest {
 	public void setupFixture() {
 		setId(qr1, 1l);
 		setId(qr2, 2l);
+		setId(q1, "ref");
 	}
 
 	@Test
@@ -56,6 +55,7 @@ public class QuoteSerialiserTest {
 		Node root = result.getNode();
 		Element eltNode = (Element) root.getFirstChild();
 		assertEquals("The id should not be exposed", "", eltNode.getAttribute("id"));
+		assertEquals("ref", eltNode.getElementsByTagName("transportReference").item(0).getTextContent());
 		assertEquals("5.23", eltNode.getElementsByTagName("price").item(0).getTextContent());
 		assertEquals("#AAA", eltNode.getElementsByTagName("shipperReference").item(0).getTextContent());
 		assertXmlTimeEquals("2000-01-02T03:04:05.006Z", eltNode.getElementsByTagName("pickupFromTime").item(0).getTextContent());

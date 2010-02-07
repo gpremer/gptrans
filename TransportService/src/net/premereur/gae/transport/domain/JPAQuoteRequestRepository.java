@@ -38,5 +38,12 @@ public class JPAQuoteRequestRepository implements QuoteRequestRepository {
 	public void removeAll() {
 		entityManager.createQuery("DELETE FROM QuoteRequest").executeUpdate();		
 	}
+	
+	@Override
+	public Quote getQuoteForReference(String quoteReference) throws BusinessException {
+		Quote quote = (Quote) entityManager.createQuery("SELECT FROM Quote WHERE id = :id").setParameter("id", quoteReference).getSingleResult();
+		
+		return quote;
+	}
 
 }

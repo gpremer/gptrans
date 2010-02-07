@@ -20,7 +20,7 @@ public class XmlQuote implements Serializable {
 	
 	private final BigDecimal price;
 
-	private final String shipperReference;
+	private final String customerReference;
 
 	private final Date pickupFromTime;
 
@@ -32,7 +32,7 @@ public class XmlQuote implements Serializable {
 		this.transportReference = quote.getId();
 		this.validity = quote.getValidity();
 		this.price = quote.getPrice();
-		this.shipperReference = quote.getShipperReference();
+		this.customerReference = quote.getCustomerReference();
 		this.pickupFromTime = quote.getPickupFromTime();
 		this.pickupToTime = quote.getPickupToTime();
 	}
@@ -43,7 +43,7 @@ public class XmlQuote implements Serializable {
 		this.transportReference = null;
 		this.validity = null;
 		this.price = null;
-		this.shipperReference = null;
+		this.customerReference = null;
 		this.pickupFromTime = null;
 		this.pickupToTime = null;
 	}
@@ -60,8 +60,8 @@ public class XmlQuote implements Serializable {
 		return this.price;
 	}
 
-	public String getShipperReference() {
-		return this.shipperReference;
+	public String getCustomerReference() {
+		return this.customerReference;
 	}
 
 	public Date getPickupFromTime() {

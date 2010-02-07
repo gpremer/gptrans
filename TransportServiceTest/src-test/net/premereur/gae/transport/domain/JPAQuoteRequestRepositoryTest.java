@@ -107,4 +107,12 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 		assertFalse(storedQr.getQuotes().isEmpty());
 		assertNotNull(storedQr.getQuotes().iterator().next().getValidity());
 	}
+	
+	@Test
+	public void shouldRetrieveQuoteByReference() throws Exception {
+		qr1.computeQuotesIfNotAvailableYet();
+		Quote firstQuote = qr1.getQuotes().iterator().next();
+		Quote loadedQuote = repository.getQuoteForReference(firstQuote.getId());
+		assertNotNull("Should find a quote by it's reference", loadedQuote);
+	}
 }

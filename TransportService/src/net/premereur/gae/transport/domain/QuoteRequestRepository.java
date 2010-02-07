@@ -11,4 +11,6 @@ public interface QuoteRequestRepository {
 	QuoteRequest findByKey(Long quoteRequestId);
 
 	void removeAll();
+
+	Quote getQuoteForReference(String quoteReference) throws BusinessException;
 }

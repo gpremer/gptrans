@@ -57,7 +57,7 @@ public class QuoteSerialiserTest {
 		assertEquals("The id should not be exposed", "", eltNode.getAttribute("id"));
 		assertEquals("ref", eltNode.getElementsByTagName("transportReference").item(0).getTextContent());
 		assertEquals("5.23", eltNode.getElementsByTagName("price").item(0).getTextContent());
-		assertEquals("#AAA", eltNode.getElementsByTagName("shipperReference").item(0).getTextContent());
+		assertEquals("#AAA", eltNode.getElementsByTagName("customerReference").item(0).getTextContent());
 		assertXmlTimeEquals("2000-01-02T03:04:05.006Z", eltNode.getElementsByTagName("pickupFromTime").item(0).getTextContent());
 		assertXmlTimeEquals("2000-01-02T07:04:05.006+00:00", eltNode.getElementsByTagName("pickupToTime").item(0).getTextContent());
 		assertXmlTimeEquals("2000-01-02T04:00:00Z", eltNode.getElementsByTagName("validity").item(0).getTextContent());

@@ -22,7 +22,7 @@ public class Quote {
 
 	private BigDecimal price;
 
-	private String shipperReference;
+	private String customerReference;
 
 	private Date pickupFromTime;
 
@@ -37,7 +37,7 @@ public class Quote {
 		this.originator = originator;
 		this.validity = validity;
 		this.price = price;
-		this.shipperReference = this.originator.getCustomerReference();
+		this.customerReference = this.originator.getCustomerReference();
 		this.pickupFromTime = pickupFromTime;
 		this.pickupToTime = pickupToTime;
 	}
@@ -47,7 +47,7 @@ public class Quote {
 		this.originator = null;
 		this.validity = null;
 		this.price = null;
-		this.shipperReference = null;
+		this.customerReference = null;
 		this.pickupFromTime = null;
 		this.pickupToTime = null;
 	}
@@ -73,8 +73,8 @@ public class Quote {
 		return this.price;
 	}
 
-	public String getShipperReference() {
-		return this.shipperReference;
+	public String getCustomerReference() {
+		return this.customerReference;
 	}
 
 	public Date getPickupFromTime() {

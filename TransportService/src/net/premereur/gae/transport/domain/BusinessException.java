@@ -4,7 +4,19 @@ public class BusinessException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public static enum REASON {
-		QUOTE_ALREADY_USED
+	public static enum Reason {
+		QUOTE_NOT_VALID
 	}
+
+	private Reason reason;
+
+	public BusinessException(Reason reason, String message) {
+		super(message);
+		this.reason = reason;
+	}
+
+	public Reason getReason() {
+		return this.reason;
+	}
+
 }

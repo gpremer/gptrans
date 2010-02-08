@@ -4,6 +4,7 @@ import static net.premereur.gae.transport.domain.DomainIdSetter.setId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 import java.util.Arrays;
@@ -42,9 +43,9 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 				bind(ServiceLocator.class).asEagerSingleton();
 				bind(ScheduleService.class).toInstance(mock(ScheduleService.class));
 				bind(QuoteRequestRepository.class).to(JPAQuoteRequestRepository.class);
-				bindConstant().annotatedWith(JpaUnit.class).to("transactions-optional");				
+				bindConstant().annotatedWith(JpaUnit.class).to("transactions-optional");
 			}
-			
+
 		}, PersistenceService.usingJpa().across(UnitOfWork.REQUEST).buildModule());
 	}
 
@@ -107,7 +108,7 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 		assertFalse(storedQr.getQuotes().isEmpty());
 		assertNotNull(storedQr.getQuotes().iterator().next().getValidity());
 	}
-	
+
 	@Test
 	public void shouldRetrieveQuoteByReference() throws Exception {
 		qr1.computeQuotesIfNotAvailableYet();
@@ -115,4 +116,15 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 		Quote loadedQuote = repository.getQuoteForReference(firstQuote.getId());
 		assertNotNull("Should find a quote by it's reference", loadedQuote);
 	}
+
+	@Test
+	public void shouldThrowBusinessExceptionWhenLookingForNotExistingQuoteReference() throws Exception {
+		try {
+			repository.getQuoteForReference("xxx");
+			fail("should not find quote that does not exist");
+		} catch (BusinessException e) {
+			assertEquals(BusinessException.Reason.QUOTE_NOT_VALID, e.getReason());
+		}
+	}
+
 }

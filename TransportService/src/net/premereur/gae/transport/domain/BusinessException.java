@@ -5,7 +5,7 @@ public class BusinessException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public static enum Reason {
-		QUOTE_NOT_VALID
+		QUOTE_NOT_VALID, QUOTE_EXPIRED
 	}
 
 	private Reason reason;

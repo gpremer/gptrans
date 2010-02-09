@@ -38,18 +38,18 @@ public class DemandCreationTest {
 	public void shouldCreateDemandForExistingQuoteReference() throws Exception {
 		String quoteRef = "Qr#1";
 		QuoteRequest quoteRequest = new QuoteRequest(new Date(), new Date(), 1f, 1, "cref", null);
-		Quote quote = new Quote(quoteRequest, new Date(), new BigDecimal("3"), new Date(), new Date());
+		Quote quote = new Quote(quoteRequest, new Date(new Date().getTime() + 100), new BigDecimal("3"), new Date(), new Date());
 		when(repository.getQuoteForReference(quoteRef)).thenReturn(quote);
 
 		Demand demand = new Demand(quoteRef); // should not throw exception
-												// since quote exists
+		// since quote exists
 		assertEquals(quote, demand.getQuote());
 	}
 
 	@Test
 	public void shouldNotCreateDemandIfQuoteReferenceDoesNotExist() throws Exception {
 		String quoteRef = "Qr#1";
-		when(repository.getQuoteForReference(quoteRef)).thenThrow(new BusinessException(BusinessException.Reason.QUOTE_NOT_VALID,""));
+		when(repository.getQuoteForReference(quoteRef)).thenThrow(new BusinessException(BusinessException.Reason.QUOTE_NOT_VALID, ""));
 
 		try {
 			new Demand(quoteRef); // should throw exception
@@ -58,4 +58,20 @@ public class DemandCreationTest {
 			assertEquals(BusinessException.Reason.QUOTE_NOT_VALID, e.getReason());
 		}
 	}
+
+	@Test
+	public void shouldNotCreateDemandIfQuoteIsExpired() throws Exception {
+		String quoteRef = "Qr#1";
+		QuoteRequest quoteRequest = new QuoteRequest(new Date(), new Date(), 1f, 1, "cref", null);
+		Quote quote = new Quote(quoteRequest, new Date(new Date().getTime() - 100), new BigDecimal("3"), new Date(), new Date());
+		when(repository.getQuoteForReference(quoteRef)).thenReturn(quote);
+
+		try {
+			new Demand(quoteRef); // should throw exception
+			fail("shouldn't create demand when quote is expired");
+		} catch (BusinessException e) {
+			assertEquals(BusinessException.Reason.QUOTE_EXPIRED, e.getReason());
+		}
+	}
+
 }

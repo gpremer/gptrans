@@ -11,6 +11,8 @@ import static org.mockito.Mockito.verify;
 import java.math.BigDecimal;
 import java.util.Collection;
 
+import net.premereur.gae.testutil.FixedTimeClockService;
+
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,6 +49,7 @@ public class QuoteGenerationTest {
 			protected void configure() {
 				bind(ServiceLocator.class).asEagerSingleton();
 				bind(ScheduleService.class).toInstance(mock(ScheduleService.class));
+				bind(ClockService.class).toInstance(new FixedTimeClockService(new DateTime(2100,1,1,0,0,0,0)));
 				bind(QuoteRequestRepository.class).toInstance(repository);
 			}
 		});

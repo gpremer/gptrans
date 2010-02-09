@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import net.premereur.gae.LocalAppEngineServiceTestCase;
+import net.premereur.gae.testutil.FixedTimeClockService;
 import net.premereur.gae.transport.service.quote.v1.serialisation.XmlQuoteRequests;
 import net.premereur.gae.transport.service.servlet.PersistenceInitialiser;
 
@@ -43,6 +44,7 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 				bind(ServiceLocator.class).asEagerSingleton();
 				bind(ScheduleService.class).toInstance(mock(ScheduleService.class));
 				bind(QuoteRequestRepository.class).to(JPAQuoteRequestRepository.class);
+				bind(ClockService.class).toInstance(new FixedTimeClockService(new DateTime(2100, 1, 1, 0, 0, 0, 0)));
 				bindConstant().annotatedWith(JpaUnit.class).to("transactions-optional");
 			}
 

@@ -19,15 +19,19 @@ public class DemandCreationTest {
 
 	private QuoteRequestRepository repository;
 
+	private ClockService clock;
+
 	@Before
 	public void initGuice() {
 		repository = mock(QuoteRequestRepository.class);
+		clock = mock(ClockService.class);
 		Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
 			protected void configure() {
 				bind(ServiceLocator.class).asEagerSingleton();
 				bind(ScheduleService.class).toInstance(mock(ScheduleService.class));
+				bind(ClockService.class).toInstance(clock);
 				bind(QuoteRequestRepository.class).toInstance(repository);
 			}
 		});
@@ -40,6 +44,7 @@ public class DemandCreationTest {
 		QuoteRequest quoteRequest = new QuoteRequest(new Date(), new Date(), 1f, 1, "cref", null);
 		Quote quote = new Quote(quoteRequest, new Date(new Date().getTime() + 100), new BigDecimal("3"), new Date(), new Date());
 		when(repository.getQuoteForReference(quoteRef)).thenReturn(quote);
+		when(clock.currentTime()).thenReturn(new Date());
 
 		Demand demand = new Demand(quoteRef); // should not throw exception
 		// since quote exists
@@ -50,7 +55,8 @@ public class DemandCreationTest {
 	public void shouldNotCreateDemandIfQuoteReferenceDoesNotExist() throws Exception {
 		String quoteRef = "Qr#1";
 		when(repository.getQuoteForReference(quoteRef)).thenThrow(new BusinessException(BusinessException.Reason.QUOTE_NOT_VALID, ""));
-
+		when(clock.currentTime()).thenReturn(new Date());
+		
 		try {
 			new Demand(quoteRef); // should throw exception
 			fail("shouldn't create demand when quote does not exist");
@@ -62,9 +68,11 @@ public class DemandCreationTest {
 	@Test
 	public void shouldNotCreateDemandIfQuoteIsExpired() throws Exception {
 		String quoteRef = "Qr#1";
-		QuoteRequest quoteRequest = new QuoteRequest(new Date(), new Date(), 1f, 1, "cref", null);
-		Quote quote = new Quote(quoteRequest, new Date(new Date().getTime() - 100), new BigDecimal("3"), new Date(), new Date());
+		QuoteRequest quoteRequest = new QuoteRequest(new Date(), new Date(), 1f, 1, quoteRef, null);
+		long millisNow = new Date().getTime();
+		Quote quote = new Quote(quoteRequest, new Date(millisNow + 100), new BigDecimal("3"), new Date(), new Date());
 		when(repository.getQuoteForReference(quoteRef)).thenReturn(quote);
+		when(clock.currentTime()).thenReturn(new Date(millisNow + 200)); // current time is after quote validity time
 
 		try {
 			new Demand(quoteRef); // should throw exception

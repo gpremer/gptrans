@@ -14,7 +14,6 @@ import org.datanucleus.jpa.annotations.Extension;
 
 @Entity
 public class Quote {
-	@SuppressWarnings("unused")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")

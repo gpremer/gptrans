@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src-config"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.jar" sourcepath="/usr/local/lib/java/restlet-gae-2.0/src/org.restlet"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.ext.servlet.jar" sourcepath="/usr/local/lib/java/restlet-gae-2.0/src/org.restlet.ext.servlet"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.ext.xstream.jar"/>
@@ -24,5 +23,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.ext.jaxb.jar" sourcepath="/usr/local/lib/java/restlet-gae-2.0/src/org.restlet.ext.jaxb"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/joda-time-1.5.2.jar"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine (1)"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

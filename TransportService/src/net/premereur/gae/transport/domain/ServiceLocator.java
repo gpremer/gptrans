@@ -10,16 +10,20 @@ public class ServiceLocator {
 	private final ScheduleService callbackService;
 
 	private final Provider<QuoteRequestRepository> quoteRequestRepository;
-	
+
+	private final Provider<DemandRepository> demandRepository;
+
 	private final ClockService clockService;
 
 	private static ServiceLocator singleton;
 
 	@Inject
-	ServiceLocator(final ScheduleService callbackService, final Provider<QuoteRequestRepository> quoteRequestRepository, final ClockService clockService) {
+	ServiceLocator(final ScheduleService callbackService, final Provider<QuoteRequestRepository> quoteRequestRepository,
+			final Provider<DemandRepository> demandRepository, final ClockService clockService) {
 		this.callbackService = callbackService;
 		this.quoteRequestRepository = quoteRequestRepository;
 		this.clockService = clockService;
+		this.demandRepository = demandRepository;
 		singleton = this;
 	}
 
@@ -33,10 +37,14 @@ public class ServiceLocator {
 
 	public QuoteRequestRepository getQuoteRequestRepository() {
 		return quoteRequestRepository.get();
-		
+
 	}
 
 	public ClockService getClockService() {
 		return clockService;
+	}
+
+	public DemandRepository getDemandRepository() {
+		return demandRepository.get();
 	}
 }

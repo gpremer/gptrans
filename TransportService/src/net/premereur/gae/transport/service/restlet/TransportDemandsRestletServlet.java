@@ -7,7 +7,9 @@ import net.premereur.gae.transport.service.servlet.GuiceRouter;
 import org.restlet.Context;
 
 import com.google.inject.Injector;
+import com.google.inject.Singleton;
 
+@Singleton
 public class TransportDemandsRestletServlet extends GAERestletServlet {
 
 	private static final long serialVersionUID = 1L;

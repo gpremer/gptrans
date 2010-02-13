@@ -44,6 +44,7 @@ public class JPAQuoteRequestRepositoryTest extends LocalAppEngineServiceTestCase
 				bind(ServiceLocator.class).asEagerSingleton();
 				bind(ScheduleService.class).toInstance(mock(ScheduleService.class));
 				bind(QuoteRequestRepository.class).to(JPAQuoteRequestRepository.class);
+				bind(DemandRepository.class).toInstance(mock(DemandRepository.class));
 				bind(ClockService.class).toInstance(new FixedTimeClockService(new DateTime(2100, 1, 1, 0, 0, 0, 0)));
 				bindConstant().annotatedWith(JpaUnit.class).to("transactions-optional");
 			}

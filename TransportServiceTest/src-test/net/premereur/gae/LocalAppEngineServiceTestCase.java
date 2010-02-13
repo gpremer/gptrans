@@ -23,6 +23,12 @@ public abstract class LocalAppEngineServiceTestCase {
 		ApiProxy.setDelegate(new ApiProxyLocalImpl(new File(".")) {
 		});
 		dontStoreInDatastore();
+		allowMultipleEntityManagerFactpories();
+	}
+
+	private void allowMultipleEntityManagerFactpories() {
+		System.setProperty("appengine.orm.disable.duplicate.emf.exception", "1");
+		
 	}
 
 	public void dontStoreInDatastore() throws Exception {

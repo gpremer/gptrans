@@ -51,6 +51,7 @@ public class QuoteGenerationTest {
 				bind(ScheduleService.class).toInstance(mock(ScheduleService.class));
 				bind(ClockService.class).toInstance(new FixedTimeClockService(new DateTime(2100,1,1,0,0,0,0)));
 				bind(QuoteRequestRepository.class).toInstance(repository);
+				bind(DemandRepository.class).toInstance(mock(DemandRepository.class));
 			}
 		});
 		injector.getInstance(ServiceLocator.class);

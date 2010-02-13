@@ -17,13 +17,16 @@ import com.google.inject.Injector;
 
 public class DemandCreationTest {
 
-	private QuoteRequestRepository repository;
+	private QuoteRequestRepository qRRepository;
+	
+	private DemandRepository dRepository;
 
 	private ClockService clock;
 
 	@Before
 	public void initGuice() {
-		repository = mock(QuoteRequestRepository.class);
+		qRRepository = mock(QuoteRequestRepository.class);
+		dRepository = mock(DemandRepository.class);
 		clock = mock(ClockService.class);
 		Injector injector = Guice.createInjector(new AbstractModule() {
 
@@ -32,7 +35,8 @@ public class DemandCreationTest {
 				bind(ServiceLocator.class).asEagerSingleton();
 				bind(ScheduleService.class).toInstance(mock(ScheduleService.class));
 				bind(ClockService.class).toInstance(clock);
-				bind(QuoteRequestRepository.class).toInstance(repository);
+				bind(QuoteRequestRepository.class).toInstance(qRRepository);
+				bind(DemandRepository.class).toInstance(dRepository);
 			}
 		});
 		injector.getInstance(ServiceLocator.class);
@@ -43,18 +47,20 @@ public class DemandCreationTest {
 		String quoteRef = "Qr#1";
 		QuoteRequest quoteRequest = new QuoteRequest(new Date(), new Date(), 1f, 1, "cref", null);
 		Quote quote = new Quote(quoteRequest, new Date(new Date().getTime() + 100), new BigDecimal("3"), new Date(), new Date());
-		when(repository.getQuoteForReference(quoteRef)).thenReturn(quote);
+		quote.setId(quoteRef);
+		when(qRRepository.getQuoteForReference(quoteRef)).thenReturn(quote);
+		when(dRepository.getDemandForQuoteReference(quoteRef)).thenThrow(new BusinessException(BusinessException.Reason.NO_SUCH_DEMAND,""));
 		when(clock.currentTime()).thenReturn(new Date());
 
 		Demand demand = new Demand(quoteRef); // should not throw exception
 		// since quote exists
-		assertEquals(quote, demand.getQuote());
+		assertEquals(quote.getId(), demand.getQuoteReference());
 	}
 
 	@Test
 	public void shouldNotCreateDemandIfQuoteReferenceDoesNotExist() throws Exception {
 		String quoteRef = "Qr#1";
-		when(repository.getQuoteForReference(quoteRef)).thenThrow(new BusinessException(BusinessException.Reason.QUOTE_NOT_VALID, ""));
+		when(qRRepository.getQuoteForReference(quoteRef)).thenThrow(new BusinessException(BusinessException.Reason.QUOTE_NOT_VALID, ""));
 		when(clock.currentTime()).thenReturn(new Date());
 		
 		try {
@@ -71,7 +77,7 @@ public class DemandCreationTest {
 		QuoteRequest quoteRequest = new QuoteRequest(new Date(), new Date(), 1f, 1, quoteRef, null);
 		long millisNow = new Date().getTime();
 		Quote quote = new Quote(quoteRequest, new Date(millisNow + 100), new BigDecimal("3"), new Date(), new Date());
-		when(repository.getQuoteForReference(quoteRef)).thenReturn(quote);
+		when(qRRepository.getQuoteForReference(quoteRef)).thenReturn(quote);
 		when(clock.currentTime()).thenReturn(new Date(millisNow + 200)); // current time is after quote validity time
 
 		try {
@@ -79,6 +85,28 @@ public class DemandCreationTest {
 			fail("shouldn't create demand when quote is expired");
 		} catch (BusinessException e) {
 			assertEquals(BusinessException.Reason.QUOTE_EXPIRED, e.getReason());
+		}
+	}
+
+	@Test
+	public void shouldNotCreateDemandForSameQuoteTwice() throws Exception {
+		String quoteRef = "Qr#1";
+		QuoteRequest quoteRequest = new QuoteRequest(new Date(), new Date(), 1f, 1, "cref", null);
+		long millisNow = new Date().getTime();
+		Quote quote = new Quote(quoteRequest, new Date(millisNow + 1000), new BigDecimal("3"), new Date(), new Date());
+		Demand demand = null; 
+		when(qRRepository.getQuoteForReference(quoteRef)).thenReturn(quote);
+		// current time is before quote validity time
+		when(clock.currentTime()).thenReturn(new Date(millisNow + 200)); 
+		when(dRepository.getDemandForQuoteReference(quoteRef)).thenThrow(new BusinessException(BusinessException.Reason.NO_SUCH_DEMAND,"")).thenReturn(demand);
+
+		demand = new Demand(quoteRef); // should be Ok
+		when(dRepository.getDemandForQuoteReference(quoteRef)).thenReturn(demand);
+		try {
+			new Demand(quoteRef); // should throw an exception
+			fail("shouldn't create demand for same quote twice");
+		} catch (BusinessException e) {
+			assertEquals(BusinessException.Reason.QUOTE_ALREADY_TAKEN, e.getReason());
 		}
 	}
 

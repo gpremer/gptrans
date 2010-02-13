@@ -8,8 +8,6 @@ import java.math.BigDecimal;
 import java.util.Collection;
 
 import net.premereur.gae.LocalAppEngineServiceTestCase;
-import net.premereur.gae.testutil.FixedTimeClockService;
-import net.premereur.gae.transport.service.servlet.PersistenceInitialiser;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -17,11 +15,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.wideplay.warp.persist.PersistenceService;
-import com.wideplay.warp.persist.UnitOfWork;
-import com.wideplay.warp.persist.jpa.JpaUnit;
 
 public class JPADemandRepositoryTest extends LocalAppEngineServiceTestCase {
 
@@ -34,25 +28,20 @@ public class JPADemandRepositoryTest extends LocalAppEngineServiceTestCase {
 
 	@BeforeClass
 	static public void initGuice() {
-		injector = Guice.createInjector(new AbstractModule() {
+		injector = initGuice(new AbstractModule() {
 
 			@Override
 			protected void configure() {
-				bind(PersistenceInitialiser.class).asEagerSingleton();
-				bind(ServiceLocator.class).asEagerSingleton();
 				bind(ScheduleService.class).toInstance(mock(ScheduleService.class));
 				bind(QuoteRequestRepository.class).toInstance(mock(JPAQuoteRequestRepository.class));
 				bind(DemandRepository.class).to(JPADemandRepository.class);
-				bind(ClockService.class).toInstance(new FixedTimeClockService(new DateTime(2100, 1, 1, 0, 0, 0, 0)));
-				bindConstant().annotatedWith(JpaUnit.class).to("transactions-optional");
 			}
 
-		}, PersistenceService.usingJpa().across(UnitOfWork.REQUEST).buildModule());
+		});
 	}
 
 	@Before
 	public void initRepository() {
-		// System.setProperty("appengine.orm.disable.duplicate.emf.exception",Boolean.TRUE.toString());
 		demandRepository = injector.getInstance(DemandRepository.class);
 		quoteRequestRepository = injector.getInstance(QuoteRequestRepository.class);
 	}
